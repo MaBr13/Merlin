@@ -22,4 +22,8 @@
 *.ppt
 
 *.h5
+*.bmp
+*._.DS_Store
+*.db
 
+.Rproj.user
