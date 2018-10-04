@@ -1,5 +1,5 @@
 ##################################################
-#####Data anlysis horizontal bird radar, OWEZ#####
+#####Data analysis horizontal bird radar, OWEZ#####
 ##################################################
 ###Bradaric Maja, UvA, 17.07.2018
 
@@ -102,7 +102,7 @@ for (k in 1:length(Allyears)){
   }
 
 ############################################################
-##########making table with means###########################
+##########making table with means per hour##################
 
 
                                                                                                    
@@ -234,7 +234,33 @@ for(k in 1:length(Allyears)){
   Allyears[[k]] %<>% mutate(Wspeed = fct_explicit_na(Allyears[[k]]$Wspeed, na_level = "Data n/a"))
 }
 
+####dividing data by season
+#mean values
+Spring <- list()
+for(k in 1:length(means)){
+  
+  Spring[[k]] <- subset(means[[k]], Season==2, select=Timestamp:Rlight)
+}
 
+Autumn <- list()
+
+for(k in 1:length(means)){
+  
+  Autumn[[k]] <- subset(means[[k]], Season==4, select=Timestamp:Rlight)
+}
+#total values
+SpringAll <- list()
+for(k in 1:length(Allyears)){
+  
+  SpringAll[[k]] <- subset(Allyears[[k]], Season==2, select=id:Wspeed)
+}
+
+AutumnAll <- list()
+
+for(k in 1:length(Allyears)){
+  
+  AutumnAll[[k]] <- subset(Allyears[[k]], Season==4, select=id:Wspeed)
+}
 
 
 
