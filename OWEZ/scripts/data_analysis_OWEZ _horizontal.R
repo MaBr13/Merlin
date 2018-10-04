@@ -3,7 +3,7 @@
 ##################################################
 ###Bradaric Maja, UvA, 17.07.2018
 
-path <- setwd("C:/Users/mbradar/Documents/Radar projects/Merlin/OWEZ/data/horizontal/bigger tables")
+path <- setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/data/horizontal/bigger tables")
 listcsv <- dir(path,pattern = "*.csv",ignore.case = FALSE)
 #getting yearly data files
 Fstyear <- listcsv[1:9]
@@ -12,9 +12,9 @@ Tyear <- listcsv[22:28]
 Fyear <- listcsv[29:31]
 ##including only columns of interest##
 #in one file
-Monthdata <- read.csv("trackplusinfo200707.csv",sep=';')[,c("trackid", "jaar","maand", "dag", "uur","minuut",
-                                                            "season", "light","trackheading","groundspeedkph", 
-                                                            "airspeedkph", "windspeedkph","winddir")]
+Monthdata <- read.csv("trackplusinfo200707.csv",sep=';')#[,c("trackid", "jaar","maand", "dag", "uur","minuut",
+                                                         #   "season", "light","trackheading","groundspeedkph", 
+                                                          #  "airspeedkph", "windspeedkph","winddir")]
 #in multiple files
 #1st year
 nc <- ncol(read.csv(Fstyear[1], sep=';',header = TRUE, nrows=1))#determine number of total columns
@@ -66,6 +66,45 @@ library(xts)
 Allyears <- list(y2007,y2008,y2009,y2010)
 rm(list = c("listFstyear","listFyear","listSyear", 
             "listTyear", "y2007", "y2008", "y2009","y2010"))#remove all the lists you don't need
+
+
+############################################################
+############manipulations with Allyears table###############
+
+##calculating wind direction (direction where the wind blows to)
+##winddir column represents wind direction wind blows from, and new.winddir wind direction where wind blows to
+
+for (k in 1:length(Allyears)){
+ 
+  
+  Allyears[[k]]$new.winddir <- Allyears[[k]]$winddir+180  
+}
+
+##calculating heading from track direction, groundspeed, wind direction and wind speed
+
+for (k in 1:length(Allyears)){
+  
+  Allyears[[k]]$groundspeedms <- Allyears[[k]]$groundspeedkph/3.6
+  Allyears[[k]]$windspeedms <- Allyears[[k]]$windspeedkph/3.6
+  trackheadingR <- Allyears[[k]]$trackheading*(pi/180)#formula for conversion to radians
+  winddirR <- Allyears[[k]]$new.winddir*(pi/180)
+  strack<- sin(trackheadingR)#calculate sinus and cosinus of track and wind direction
+  ctrack <- cos(trackheadingR)
+  swind <- sin(winddirR)
+  cwind <- cos(winddirR)
+  
+  xa <- (Allyears[[k]]$groundspeedms*strack)-(Allyears[[k]]$windspeedms*swind)
+  ya <- (Allyears[[k]]$groundspeedms*ctrack)-(Allyears[[k]]$windspeedms*cwind)
+  
+  heading<- atan2(xa,ya)
+  Allyears[[k]]$airspeedms<-sqrt((xa^2)+(ya^2)) 
+  Allyears[[k]]$r.heading <- heading*(180/pi)#formula for conversion back to angles
+  }
+
+############################################################
+##########making table with means###########################
+
+
                                                                                                    
 counts <- list()
 mean.grspeed <- list()
@@ -91,11 +130,11 @@ month <- list()
 
 for(k in 1:length(Allyears)){
   counts[[k]] <- aggregate(Allyears[[k]]$id,by = list(Allyears[[k]]$timestep), FUN="length")
-  mean.grspeed[[k]] <- aggregate(Allyears[[k]]$groundspeedkph, by = list(Allyears[[k]]$timestep), FUN="mean")
-  mean.aspeed[[k]] <- aggregate(Allyears[[k]]$airspeedkph, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.wspeed[[k]] <- aggregate(Allyears[[k]]$windspeedkph, by=list(Allyears[[k]]$timestep), FUN="mean")
+  mean.grspeed[[k]] <- aggregate(Allyears[[k]]$groundspeedms, by = list(Allyears[[k]]$timestep), FUN="mean")
+  mean.aspeed[[k]] <- aggregate(Allyears[[k]]$airspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
+  mean.wspeed[[k]] <- aggregate(Allyears[[k]]$windspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
   mean.heading[[k]] <- aggregate(Allyears[[k]]$trackheading, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.winddir[[k]] <- aggregate(Allyears[[k]]$winddir, by=list(Allyears[[k]]$timestep), FUN="mean")
+  mean.winddir[[k]] <- aggregate(Allyears[[k]]$new.winddir, by=list(Allyears[[k]]$timestep), FUN="mean")
   date[[k]]<- aggregate(Allyears[[k]]$date, by=list(Allyears[[k]]$timestep), FUN="median")
   month[[k]] <- aggregate(Allyears[[k]]$maand, by=list(Allyears[[k]]$timestep), FUN="median")
   names(month[[k]])[c(1,2)] <- paste(c("Timestamp","Month"))
@@ -123,39 +162,27 @@ for(k in 1:length(Allyears)){
 rm(list =c("counts","mean.grspeed", "mean.aspeed", "mean.wspeed","mean.heading" ,"mean.winddir","date", 
            "season","light","dayP","g", "s" ,"p" ,"a" ,"d","l" ,"b" ,"e" ,"f" ,"month")) 
 
-cut(capture.output(print(means),file="means.csv"))
+cut(capture.output(print(means),file="means.csv"))#if you want to save the table as csv
 ##########################################################
-#############manipulations with means table###############
+#############Manipulations with means table###############
 
 #categories according to air speed
 for(k in 1:length(means)){
   
-  means[[k]]$Aspeed<- cut(means[[k]]$Mean.aspeed,breaks=c(0,50,100,150), 
-                              labels = c("0-50", "50-100", ">100"))
+  means[[k]]$Aspeed<- cut(means[[k]]$Mean.aspeed,breaks=c(0,12,15,18,27,45), 
+                              labels = c("0-12","12-15","15-18", "18-27", ">27"))
   
 }
 #categories wind speed
 for(k in 1:length(means)){
   
-  means[[k]]$Wspeed<- cut(means[[k]]$Mean.wspeed,breaks=c(0,50,100,150), 
-                          labels = c("0-50", "50-100", ">100"))
+  means[[k]]$Wspeed<- cut(means[[k]]$Mean.wspeed,breaks=c(0,10,15,20,30,40,50), 
+                          labels = c("0-10","10-15","15-20","20-30", "30-40", ">40"))
   
 }
-#categories direction
-#Autumn
-for(k in 1:length(means)){
+
   
-  means[[k]]$DirectionA <- cut(means[[k]]$Mean.head,breaks=c(0,200,250,290,360), 
-                          labels = c("0-200", "200-250", "250-290","290-360"))
-  
-}
-#spring
-for(k in 1:length(means)){
-  
-  means[[k]]$DirectionS <- cut(means[[k]]$Mean.head,breaks=c(0,30,70,120,360), 
-                               labels = c("0-30", "30-70", "70-120","120-360"))
-  
-}
+
 #mark NAs with a category
 library(dplyr)   # gives mutate_if
 library(forcats) # gives fct_explicit_na
@@ -167,10 +194,6 @@ for(k in 1:length(means)){
 
 for(k in 1:length(means)){
   means[[k]] %<>% mutate(Wspeed = fct_explicit_na(means[[k]]$Wspeed, na_level = "Data n/a")) 
-}
-
-for(k in 1:length(means)){
-  means[[k]] %<>% mutate(DirectionA = fct_explicit_na(means[[k]]$DirectionA, na_level = "Data n/a")) 
 }
 
 
@@ -189,50 +212,30 @@ for(k in 1:length(means)){
 #categories according to air speed
 for(k in 1:length(Allyears)){
   
-  Allyears[[k]]$Aspeed<- cut(Allyears[[k]]$airspeedkph,breaks=c(0,50,100,150), 
-                          labels = c("0-50", "50-100", ">100"))
+  Allyears[[k]]$Aspeed<- cut(Allyears[[k]]$airspeedms,breaks=c(0,12,15,18,27,45), 
+                          labels = c("0-12","12-15","15-18", "18-27", ">27"))
   
 }
 #categories wind speed
 for(k in 1:length(Allyears)){
   
-  Allyears[[k]]$Wspeed<- cut(Allyears[[k]]$windspeedkph,breaks=c(0,50,100,150), 
-                          labels = c("0-50", "50-100", ">100"))
+  Allyears[[k]]$Wspeed<- cut(Allyears[[k]]$windspeedms,breaks=c(0,10,15,20,30,40,50), 
+                          labels = c("0-10","10-15","15-20","20-30", "30-40", ">40"))
   
 }
-#categories direction
-#Autumn
-for(k in 1:length(Allyears)){
-  
-  Allyears[[k]]$DirectionA <- cut(Allyears[[k]]$trackheading,breaks=c(0,200,250,290,360), 
-                               labels = c("0-200", "200-250", "250-290","290-360"))
-  
-}
-#spring
-for(k in 1:length(Allyears)){
-  
-  Allyears[[k]]$DirectionS <- cut(Allyears[[k]]$trackheading,breaks=c(0,30,70,120,360), 
-                               labels = c("0-30", "30-70", "70-120","120-360"))
-  
-}
+
 #mark NAs with a category
 library(dplyr)   # gives mutate_if
 library(forcats) # gives fct_explicit_na
 library(magrittr) # for piping
 
 for(k in 1:length(Allyears)){
-  Allyears[[k]] %<>% mutate(Aspeed = fct_explicit_na(Allyears[[k]]$Aspeed, na_level = "Data n/a")) 
+  Allyears[[k]] %<>% mutate(Aspeed = fct_explicit_na(Allyears[[k]]$Aspeed, na_level = "Data n/a"))
+  Allyears[[k]] %<>% mutate(Wspeed = fct_explicit_na(Allyears[[k]]$Wspeed, na_level = "Data n/a"))
 }
 
-for(k in 1:length(Allyears)){
-  Allyears[[k]] %<>% mutate(Wspeed = fct_explicit_na(Allyears[[k]]$Wspeed, na_level = "Data n/a")) 
-}
 
-for(k in 1:length(Allyears)){
-  Allyears[[k]] %<>% mutate(DirectionA = fct_explicit_na(Allyears[[k]]$DirectionA, na_level = "Data n/a")) 
-}
 
-for(k in 1:length(Allyears)){
-  Allyears[[k]] %<>% mutate(DirectionS = fct_explicit_na(Allyears[[k]]$DirectionS, na_level = "Data n/a")) 
-}
+
+
 
