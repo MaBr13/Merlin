@@ -216,10 +216,10 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
    
 ####PLOT A WIND ROSES OF WIND DIRECTION AND SPEED IN SPRING
 
-      spwS1 <- ggplot(SpringAll[[1]], aes(x=winddir)) + 
+      spwS1 <- ggplot(SpringAll[[1]], aes(x=new.winddir)) + 
       geom_histogram(aes(fill=SpringAll[[1]]$Wspeed, colour=SpringAll[[1]]$Wspeed), breaks=c(0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,240,255,270,285,300,315,330,345,360)) +
-      scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Wind speed (m/s)", drop=F)+
-      scale_fill_manual(values = c("steelblue","navy", "yellow",  "grey"), name="Wind speed (m/s)", drop=F)+
+        scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
+        scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
       ggtitle(2007) + 
       ylab("Number of tracks")+ ylim(0,75000)+
       theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
@@ -228,8 +228,8 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
     
      spwS2 <- ggplot(SpringAll[[2]], aes(x=winddir)) + 
       geom_histogram(aes(fill=SpringAll[[2]]$Wspeed, colour=SpringAll[[2]]$Wspeed), breaks=c(0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,240,255,270,285,300,315,330,345,360)) +
-      scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Wind speed (m/s)", drop=F)+
-      scale_fill_manual(values = c("steelblue","navy", "yellow",  "grey"), name="Wind speed (m/s)", drop=F)+
+       scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
+       scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
       ggtitle(2008) +
       ylab("Number of tracks")+ ylim(0,75000)+
       theme(axis.text.y = element_blank(), 
@@ -240,12 +240,11 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
       coord_polar(start = 0) +
       scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
     
-    #spwS3 <- 
-      ggplot(SpringAll[[3]], aes(x=new.winddir)) + 
+    spwS3 <- ggplot(SpringAll[[3]], aes(x=new.winddir)) + 
       geom_histogram(aes(fill=SpringAll[[3]]$Wspeed, colour=SpringAll[[3]]$Wspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
       scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
       scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
-      ggtitle("Wind rose") +
+      ggtitle(2009) +
       ylab("Number of tracks")+ylim(0,105000)+
       theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
             legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -254,10 +253,10 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
       coord_polar(start = 0) +
       scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
     
-    spwS4 <- ggplot(SpringAll[[4]], aes(x=winddir)) + 
+    spwS4 <- ggplot(SpringAll[[4]], aes(x=new.winddir)) + 
       geom_histogram(aes(fill=SpringAll[[4]]$Wspeed, colour=SpringAll[[4]]$Wspeed), breaks=c(0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,240,255,270,285,300,315,330,345,360)) +
-      scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Wind speed (m/s)", drop=F)+
-      scale_fill_manual(values = c("steelblue","navy", "yellow",  "grey"), name="Wind speed (m/s)", drop=F)+
+      scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
+      scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
       ggtitle(2010) +
       ylab("Number of tracks")+ylim(0,75000)+
       theme(axis.text.y = element_blank(), 
@@ -277,22 +276,21 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
     
 ####PLOT A WIND ROSE OF WIND DIRECTION AND SPEED IN AUTUMN
 
-spwA1 <- ggplot(AutumnAll[[1]], aes(x=winddir)) + 
+spwA1 <- ggplot(AutumnAll[[1]], aes(x=new.winddir)) + 
   geom_histogram(aes(fill=AutumnAll[[1]]$Wspeed, colour=AutumnAll[[1]]$Wspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Wind speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("steelblue","navy", "yellow",  "grey"), name="Wind speed (m/s)", drop=F)+
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
   ggtitle(2007) + 
   ylab("Number of tracks")+ ylim(0,105000)+
   theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-#spwA2 <- 
-ggplot(AutumnAll[[2]], aes(x=new.winddir)) + 
+spwA2 <- ggplot(AutumnAll[[2]], aes(x=new.winddir)) + 
   geom_histogram(aes(fill=AutumnAll[[2]]$Wspeed, colour=AutumnAll[[2]]$Wspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
   scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black"), name="Wind speed (m/s)", drop=F)+
   scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
-  ggtitle("Wind rose") + 
+  ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,132000)+
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -312,20 +310,20 @@ annotate_figure(swindA,top = textGrob("Wind direction and speed Autumn",gp=gpar(
 ####PLOT A WIND ROSE OF TRACK DIRECTIONS AND AIR SPEED IN SPRING
 
 
-sphS1 <- ggplot(SpringAll[[1]], aes(x=trackheading)) + 
+sptdS1 <- ggplot(SpringAll[[1]], aes(x=trackheading)) + 
   geom_histogram(aes(fill=SpringAll[[1]]$Aspeed, colour=SpringAll[[1]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("coral3", "forestgreen", "grey0", "grey"), name="Air speed (m/s)", drop=F)+
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2007) + 
   ylab("Number of tracks")+ ylim(0,150000)+
   theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-sphS2 <- ggplot(SpringAll[[2]], aes(x=trackheading)) + 
+sptdS2 <- ggplot(SpringAll[[2]], aes(x=trackheading)) + 
   geom_histogram(aes(fill=SpringAll[[2]]$Aspeed, colour=SpringAll[[2]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("coral3", "forestgreen", "grey0", "grey"), name="Air speed (m/s)", drop=F)+
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,150000)+
   theme(axis.text.y = element_blank(), 
@@ -336,13 +334,11 @@ sphS2 <- ggplot(SpringAll[[2]], aes(x=trackheading)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-#sphS3 <- 
-
-ggplot(SpringAll[[3]], aes(x=trackheading)) + 
+sptdS3 <- ggplot(SpringAll[[3]], aes(x=trackheading)) + 
   geom_histogram(aes(fill=SpringAll[[3]]$Aspeed, colour=SpringAll[[3]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
   scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
-  ggtitle("Flight direction") + 
+  ggtitle(2009) + 
   ylab("Number of tracks")+ ylim(0,105000)+
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -351,10 +347,106 @@ ggplot(SpringAll[[3]], aes(x=trackheading)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-sphS4 <- ggplot(SpringAll[[4]], aes(x=trackheading)) + 
+sptdS4 <- ggplot(SpringAll[[4]], aes(x=trackheading)) + 
   geom_histogram(aes(fill=SpringAll[[4]]$Aspeed, colour=SpringAll[[4]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("coral3", "forestgreen", "grey0", "grey"), name="Air speed (m/s)", drop=F)+
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2010) + 
+  ylab("Number of tracks")+ ylim(0,150000)+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+library(ggpubr)
+library(gridExtra)
+library(grid)
+sheadS <- ggarrange(sphS1, sphS2,sphS3, sphS4,  ncol=4, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.31,1,1,1)) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
+annotate_figure(sheadS,top = textGrob("Track directions and air speeds Spring",gp=gpar(fontsize=20,fontface="bold")))
+
+####PLOT A WIND ROSE OF TRACK DIRECTIONS AND AIR SPEED IN AUTUMN
+
+
+
+sptdA1 <- ggplot(AutumnAll[[1]], aes(x=trackheading)) + 
+  geom_histogram(aes(fill=AutumnAll[[1]]$Aspeed, colour=AutumnAll[[1]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2007) + 
+  ylab("Number of tracks")+ ylim(0,140000)+
+  theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+sptdA2 <- ggplot(AutumnAll[[2]], aes(x=trackheading)) + 
+  geom_histogram(aes(fill=AutumnAll[[2]]$Aspeed, colour=AutumnAll[[2]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2008) + 
+  ylab("Number of tracks")+ ylim(0,132000)+
+  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
+        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
+        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
+        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+library(ggpubr)
+library(gridExtra)
+library(grid)
+sheadA <- ggarrange(sphA1, sphA2,  ncol=2, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.32,1)) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
+annotate_figure(sheadA,top = textGrob("Track directions and air speeds Autumn",gp=gpar(fontsize=20,fontface="bold")))
+
+
+
+#### PLOT A WIND ROSE OF BIRDS HEADINGS AND AIRSPEEDS IN SPRING
+
+sphS1 <- ggplot(SpringAll[[1]], aes(x=b.heading)) + 
+  geom_histogram(aes(fill=SpringAll[[1]]$Aspeed, colour=SpringAll[[1]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2007) + 
+  ylab("Number of tracks")+ ylim(0,150000)+
+  theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+sphS2 <- ggplot(SpringAll[[2]], aes(x=b.heading)) + 
+  geom_histogram(aes(fill=SpringAll[[2]]$Aspeed, colour=SpringAll[[2]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2008) + 
+  ylab("Number of tracks")+ ylim(0,150000)+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+sphS3 <- ggplot(SpringAll[[3]], aes(x=b.heading)) + 
+  geom_histogram(aes(fill=SpringAll[[3]]$Aspeed, colour=SpringAll[[3]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
+  ggtitle(2009) + 
+  ylab("Number of tracks")+ ylim(0,105000)+
+  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
+        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
+        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
+        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  coord_polar(start = 0) +
+  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
+
+sphS4 <- ggplot(SpringAll[[4]], aes(x=b.heading)) + 
+  geom_histogram(aes(fill=SpringAll[[4]]$Aspeed, colour=SpringAll[[4]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2010) + 
   ylab("Number of tracks")+ ylim(0,150000)+
   theme(axis.text.y = element_blank(), 
@@ -371,27 +463,23 @@ library(grid)
 sheadS <- ggarrange(sphS1, sphS2,sphS3, sphS4,  ncol=4, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.31,1,1,1)) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 annotate_figure(sheadS,top = textGrob("Headings and air speeds Spring",gp=gpar(fontsize=20,fontface="bold")))
+#### PLOT A WIND ROSE OF BIRDS HEADINGS AND AIRSPEEDS IN AUTUMN
 
-####PLOT A WIND ROSE OF TRACK DIRECTIONS AND AIR SPEED IN AUTUMN
-
-
-
-sphA1 <- ggplot(AutumnAll[[1]], aes(x=trackheading)) + 
+sphA1 <- ggplot(AutumnAll[[1]], aes(x=b.heading)) + 
   geom_histogram(aes(fill=AutumnAll[[1]]$Aspeed, colour=AutumnAll[[1]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("coral3", "forestgreen", "grey0", "grey"), name="Air speed (m/s)", drop=F)+
+  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
+  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2007) + 
   ylab("Number of tracks")+ ylim(0,140000)+
   theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), plot.title = element_text(size = 16))+
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-#sphA2 <- 
-ggplot(AutumnAll[[2]], aes(x=trackheading)) + 
+sphA2 <- ggplot(AutumnAll[[2]], aes(x=b.heading)) + 
   geom_histogram(aes(fill=AutumnAll[[2]]$Aspeed, colour=AutumnAll[[2]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
   scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
-  ggtitle("Flight direction") + 
+  ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,132000)+
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -406,38 +494,6 @@ library(grid)
 sheadA <- ggarrange(sphA1, sphA2,  ncol=2, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.32,1)) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 annotate_figure(sheadA,top = textGrob("Headings and air speeds Autumn",gp=gpar(fontsize=20,fontface="bold")))
-
-
-
-#### PLOT A WIND ROSE OF BIRDS HEADINGS AND AIRSPEEDS IN SPRING
-
-ggplot(SpringAll[[3]], aes(x=b.heading)) + 
-  geom_histogram(aes(fill=SpringAll[[3]]$Aspeed, colour=SpringAll[[3]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
-  ggtitle("Heading") + 
-  ylab("Number of tracks")+ ylim(0,105000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  coord_polar(start = 0) +
-  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
-
-#### PLOT A WIND ROSE OF BIRDS HEADINGS AND AIRSPEEDS IN SPRING
-
- ggplot(AutumnAll[[2]], aes(x=b.heading)) + 
-  geom_histogram(aes(fill=AutumnAll[[2]]$Aspeed, colour=AutumnAll[[2]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
-  ggtitle("Heading") + 
-  ylab("Number of tracks")+ ylim(0,132000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  coord_polar(start = 0) +
-  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
  
  
