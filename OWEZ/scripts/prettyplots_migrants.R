@@ -214,7 +214,7 @@ migrantsA <- ggarrange(pA1, pA2,  ncol=2, nrow=1, common.legend = TRUE, legend="
   theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
 annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn",gp=gpar(fontsize=24,fontface="bold")))
    
-####PLOT A WIND ROSES OF WIND DIRECTION AND SPEED IN SPRING
+####PLOT WIND ROSES OF WIND DIRECTION AND SPEED IN SPRING
 
       spwS1 <- ggplot(SpringAll[[1]], aes(x=new.winddir)) + 
       geom_histogram(aes(fill=SpringAll[[1]]$Wspeed, colour=SpringAll[[1]]$Wspeed), breaks=c(0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,240,255,270,285,300,315,330,345,360)) +
@@ -246,10 +246,11 @@ annotate_figure(migrantsA,top = textGrob("Diurnal and nocturnal migrants Autumn"
       scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
       ggtitle(2009) +
       ylab("Number of tracks")+ylim(0,105000)+
-      theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-            legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-            axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-            axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+      theme(axis.text.y = element_blank(), 
+            axis.ticks.y = element_blank(), 
+            axis.title.y = element_blank(),
+            axis.title.x = element_blank(),
+            plot.title = element_text(size = 16)) +
       coord_polar(start = 0) +
       scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
     
@@ -292,10 +293,11 @@ spwA2 <- ggplot(AutumnAll[[2]], aes(x=new.winddir)) +
   scale_fill_manual(values = c("grey", "yellow", "navy", "blue","steelblue","cornflowerblue","cadetblue1"), name="Wind speed (m/s)", drop=F)+
   ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,132000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
@@ -340,10 +342,11 @@ sptdS3 <- ggplot(SpringAll[[3]], aes(x=trackheading)) +
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2009) + 
   ylab("Number of tracks")+ ylim(0,105000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
@@ -364,9 +367,9 @@ sptdS4 <- ggplot(SpringAll[[4]], aes(x=trackheading)) +
 library(ggpubr)
 library(gridExtra)
 library(grid)
-sheadS <- ggarrange(sphS1, sphS2,sphS3, sphS4,  ncol=4, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.31,1,1,1)) +
+strackS <- ggarrange(sptdS1, sptdS2,sptdS3, sptdS4,  ncol=4, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.31,1,1,1)) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
-annotate_figure(sheadS,top = textGrob("Track directions and air speeds Spring",gp=gpar(fontsize=20,fontface="bold")))
+annotate_figure(strackS,top = textGrob("Track directions and air speeds Spring",gp=gpar(fontsize=20,fontface="bold")))
 
 ####PLOT A WIND ROSE OF TRACK DIRECTIONS AND AIR SPEED IN AUTUMN
 
@@ -388,19 +391,20 @@ sptdA2 <- ggplot(AutumnAll[[2]], aes(x=trackheading)) +
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,132000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
 library(ggpubr)
 library(gridExtra)
 library(grid)
-sheadA <- ggarrange(sphA1, sphA2,  ncol=2, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.32,1)) +
+strackA <- ggarrange(sptdA1, sptdA2,  ncol=2, nrow=1, common.legend = TRUE, legend="bottom",widths=c(1.32,1)) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
-annotate_figure(sheadA,top = textGrob("Track directions and air speeds Autumn",gp=gpar(fontsize=20,fontface="bold")))
+annotate_figure(strackA,top = textGrob("Track directions and air speeds Autumn",gp=gpar(fontsize=20,fontface="bold")))
 
 
 
@@ -436,10 +440,11 @@ sphS3 <- ggplot(SpringAll[[3]], aes(x=b.heading)) +
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2009) + 
   ylab("Number of tracks")+ ylim(0,105000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
@@ -480,11 +485,12 @@ sphA2 <- ggplot(AutumnAll[[2]], aes(x=b.heading)) +
   scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2008) + 
-  ylab("Number of tracks")+ ylim(0,132000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  ylab("Number of tracks")+ ylim(0,140000)+
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(size = 16)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
