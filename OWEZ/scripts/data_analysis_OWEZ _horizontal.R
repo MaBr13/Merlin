@@ -77,7 +77,7 @@ rm(list = c("listFstyear","listFyear","listSyear",
 for (k in 1:length(Allyears)){
  
   
-  Allyears[[k]]$new.winddir <- Allyears[[k]]$winddir+180  
+  Allyears[[k]]$new.winddir <- ifelse(Allyears[[k]]$winddir<180.0001,Allyears[[k]]$winddir+180,Allyears[[k]]$winddir-180)  
 }
 
 ##calculating heading from track direction, groundspeed, wind direction and wind speed
@@ -99,7 +99,15 @@ for (k in 1:length(Allyears)){
   heading<- atan2(xa,ya)
   Allyears[[k]]$airspeedms<-sqrt((xa^2)+(ya^2)) 
   Allyears[[k]]$r.heading <- heading*(180/pi)#formula for conversion back to angles
-  }
+  
+}
+
+#Getting rid of negative values in heading
+
+for(k in 1:length(Allyears)){
+Allyears[[k]]$b.heading <-  ifelse(Allyears[[k]]$r.heading<0, 360+Allyears[[k]]$r.heading, Allyears[[k]]$r.heading)
+}
+
 
 ############################################################
 ##########making table with means per hour##################
@@ -162,7 +170,7 @@ for(k in 1:length(Allyears)){
 rm(list =c("counts","mean.grspeed", "mean.aspeed", "mean.wspeed","mean.heading" ,"mean.winddir","date", 
            "season","light","dayP","g", "s" ,"p" ,"a" ,"d","l" ,"b" ,"e" ,"f" ,"month")) 
 
-cut(capture.output(print(means),file="means.csv"))#if you want to save the table as csv
+#cut(capture.output(print(means),file="means.csv"))#if you want to save the table as csv
 ##########################################################
 #############Manipulations with means table###############
 
@@ -187,6 +195,7 @@ for(k in 1:length(means)){
 library(dplyr)   # gives mutate_if
 library(forcats) # gives fct_explicit_na
 library(magrittr) # for piping
+
 
 for(k in 1:length(means)){
   means[[k]] %<>% mutate(Aspeed = fct_explicit_na(means[[k]]$Aspeed, na_level = "Data n/a")) 
@@ -252,16 +261,18 @@ for(k in 1:length(means)){
 SpringAll <- list()
 for(k in 1:length(Allyears)){
   
-  SpringAll[[k]] <- subset(Allyears[[k]], Season==2, select=id:Wspeed)
+  SpringAll[[k]] <- subset(Allyears[[k]], season==2, select=id:Wspeed)
 }
 
 AutumnAll <- list()
 
 for(k in 1:length(Allyears)){
   
-  AutumnAll[[k]] <- subset(Allyears[[k]], Season==4, select=id:Wspeed)
+  AutumnAll[[k]] <- subset(Allyears[[k]], season==4, select=id:Wspeed)
 }
 
+
+z <- subset(SpringAll[[3]], new.winddir<0, select=id:Wspeed)
 
 
 
