@@ -9,7 +9,7 @@
 
 library(foreign)
 file.choose()
-dataset<- read.spss( "C:\\Users\\mbradar\\Documents\\Radar projects\\Merlin\\OWEZ\\data\\vertical\\OWEZ_X_tracks_2007-2010.sav", 
+dataset<- read.spss( "C:\\Users\\mbradar\\Documents\\Merlin\\OWEZ\\data\\vertical\\OWEZ_X_tracks_2007-2010.sav", 
                       to.data.frame = T)
 dataset1 <- read.spss("C:\\Users\\Maja\\Documents\\OWEZ data\\Xtracks_MM_MERLIN_2011_01_VerticalTTtotalnorain.sav", 
                       to.data.frame = T)
@@ -19,7 +19,7 @@ bla <- read.spss("C:\\Users\\mbradar\\Documents\\Radar projects\\Merlin\\OWEZ\\d
 #subsetting and adding timestep with library lubridate (sometimes it doesn't work, probably becuase of different
 #time specifications on different computers)
 
-Firstyear <- subset(dataset, Year==2010, select=Track_ID:light)
+Firstyear <- subset(dataset, Year==2009, select=Track_ID:light)
 Firstyear <- subset(Firstyear,Month>2, select=Track_ID:light)
 Firstyear <- subset(Firstyear,Month<6, select=Track_ID:light)
 Firstyear <- subset(Firstyear, Day==29, select=Track_ID:light)
@@ -85,14 +85,14 @@ ggplot(means, aes(Date,Nr.tracks)) +
   annotate("rect",xmin=means$Date[872],xmax=means$Date[959],ymin=0,ymax=Inf,fill="forestgreen",alpha=0.4)+
   geom_bar(stat="identity",fill="black") +
   ggtitle("Number of tracks per day October 2008") +
-  coord_cartesian(xlim=c(as.Date("2008-10-01"), as.Date("2008-10-31")))+
+  coord_cartesian(xlim=c(as.Date("2009-10-01"), as.Date("2009-10-31")))+
   #geom_vline(xintercept = as.numeric(means$Date[c(82,157,227,311,396,470,553,638,706,785,872,959)]),linetype=2,colour=c("black"),size=1.5)+
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
         axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
   xlab("Year") + ylab("Number of tracks per day") + ylim(0,20000) +
-  scale_x_date(date_breaks="days", date_labels="%d", limits=c(as.Date("2007-01-01"), as.Date("2010-06-01")))
+  scale_x_date(date_breaks="days", date_labels="%d", limits=c(as.Date("2009-10-01"), as.Date("2009-10-31")))
 
 #altitude 1
 
