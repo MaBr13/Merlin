@@ -84,7 +84,7 @@ for(k in 1:length(DaysA)){{
 for(k in 1:length(DaysM)){{
   s <- as.data.frame(DaysM[[k]])
   datetime <- paste0(format(s[1,6], format="%Y-%m-%d"))
-plot <- ggplot(DaysM[[k]], aes(Timestamp, Mean.head)) + 
+plot <- ggplot(DaysM[[k]], aes(Timestamp,b.head)) + 
   geom_line(colour="cyan3",size=1.5) +
   geom_point(colour="darkcyan",size=3)+
   ggtitle(paste("Track direction per hour",' ', datetime,sep='')) + 
@@ -96,5 +96,3 @@ ggsave(filename=paste('trdirph','_',datetime, ".png", sep=''),
 }
   print(plot)
 }
-
-
