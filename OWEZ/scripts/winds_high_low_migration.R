@@ -3,7 +3,7 @@
 #################################################################
 
 ##this script visualizes winds during high and low migration in order to check for obvious wind effects
-##Spring and Autumn are lists that contain spring and autumn seasons of all years stored as separate
+##Spring and Autumn are lists that contain Spring and Autumn seasons of all years stored as separate
 ##parts of the list
 
 
@@ -11,17 +11,17 @@
 
 for(k in 1:length(Spring)){
   
-  Spring[[k]]$Migrwind <- cut(Spring[[k]]$Mean.wspeed,breaks=c(0,10,20,30,40,50,60,70,80,90,100,150), 
-                                  labels = c("0-10", "10-20", "20-30","30-40", "40-50",
-                                             "50-60","60-70","70-80","80-90","90-100", ">100"))
+  Spring[[k]]$Migrwind <- cut(Spring[[k]]$Mean.wspeed,breaks=c(0,10,15,20,25,30,40,50,100), 
+                                  labels = c("0-10", "10-15", "15-20","20-25", "25-30",
+                                             "30-40","40-50",">50"))
   
 }
 
 for(k in 1:length(Autumn)){
   
-  Autumn[[k]]$Migrwind <- cut(Autumn[[k]]$Mean.wspeed,breaks=c(0,10,20,30,40,50,60,70,80,90,100,150), 
-                              labels = c("0-10", "10-20", "20-30","30-40", "40-50",
-                                         "50-60","60-70","70-80","80-90","90-100", ">100"))
+  Autumn[[k]]$Migrwind <- cut(Autumn[[k]]$Mean.wspeed,breaks=c(0,10,15,20,25,30,40,50,100), 
+                                 labels = c("0-10", "10-15", "15-20","20-25", "25-30",
+                                            "30-40","40-50",">50"))
   
 }
 
@@ -57,11 +57,11 @@ for(k in 1:length(Autumn)){
 #Spring for specific year
 highS <- ggplot(windS[[2]], aes(Mean.wdir)) + 
   stat_bin(stat="identity", aes(fill=windS[[2]]$Migrwind, colour=windS[[2]]$Migrwind),breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values= c("black", "black","black","black","black","black","black","black","black",
-                      "black", "black", "black"),name="Mean Wind speed ph (kph)", drop=F)+
-  scale_fill_manual(values= c("grey", "mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
-                              "magenta4","maroon","orangered4","orangered2", "coral3", "coral"),name="Mean Wind speed ph (kph)", drop=F)+
-  ggtitle("High migration") +
+  scale_colour_manual(values= c("black","black","black","black","black",
+                      "black", "black", "black"),name="Mean Wind speed ph (ms)", drop=F)+
+  scale_fill_manual(values= c("mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
+                              "magenta4","maroon"),name="Mean Wind speed ph (ms)", drop=F)+
+  ggtitle("Spring") +
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), 
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
@@ -73,11 +73,11 @@ highS <- ggplot(windS[[2]], aes(Mean.wdir)) +
 #Autumn for specific year
 highA <- ggplot(windA[[2]], aes(Mean.wdir)) + 
   stat_bin(stat="identity", aes(fill=windA[[2]]$Migrwind, colour=windA[[2]]$Migrwind),breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values= c("black", "black","black","black","black","black","black","black","black",
-                                "black", "black", "black"),name="Mean Wind speed ph (kph)", drop=F)+
-  scale_fill_manual(values= c("grey", "mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
-                              "magenta4","maroon","orangered4","orangered2", "coral3", "coral"),name="Mean Wind speed ph (kph)", drop=F)+
-  ggtitle("High migration") +
+  scale_colour_manual(values= c("black","black","black","black","black",
+                                "black", "black", "black"),name="Mean Wind speed ph (ms)", drop=F)+
+  scale_fill_manual(values= c("mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
+                              "magenta4","maroon"),name="Mean Wind speed ph (ms)", drop=F)+
+  ggtitle("Autumn") +
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"),
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
@@ -191,16 +191,16 @@ for(k in 1:length(windAL)){{
 
 lowS <- ggplot(windSL[[2]], aes(Mean.wdir)) + 
   stat_bin(stat="identity", aes(fill=windSL[[2]]$Migrwind, colour=windSL[[2]]$Migrwind),breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values= c("black", "black","black","black","black","black","black","black","black",
-                                "black", "black", "black"),name="Mean Wind speed ph (kph)", drop=F)+
-  scale_fill_manual(values= c("grey", "mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
-                              "magenta4","maroon","orangered4","orangered2", "coral3", "coral"),name="Mean Wind speed ph (kph)", drop=F)+
-  ggtitle("Low migration") +
+  scale_colour_manual(values= c("black","black","black","black","black",
+                                "black", "black", "black"),name="Mean Wind speed ph (ms)", drop=F)+
+  scale_fill_manual(values= c("mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
+                              "magenta4","maroon"),name="Mean Wind speed ph (ms)", drop=F)+
+  ggtitle("Spring") +
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"),
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
         axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  ylab("Hours with low migration")+ylim(0,60)+
+  ylab("Spring")+ylim(0,60)+
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
@@ -208,11 +208,11 @@ lowS <- ggplot(windSL[[2]], aes(Mean.wdir)) +
 
 lowA <- ggplot(windAL[[2]], aes(Mean.wdir)) + 
   stat_bin(stat="identity", aes(fill=windAL[[2]]$Migrwind, colour=windAL[[2]]$Migrwind),breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values= c("black", "black","black","black","black","black","black","black","black",
-                                "black", "black", "black"),name="Mean Wind speed ph (kph)", drop=F)+
-  scale_fill_manual(values= c("grey", "mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
-                              "magenta4","maroon","orangered4","orangered2", "coral3", "coral"),name="Mean Wind speed ph (kph)", drop=F)+
-  ggtitle("Low migration") +
+  scale_colour_manual(values= c("black","black","black","black","black",
+                                "black", "black", "black"),name="Mean Wind speed ph (ms)", drop=F)+
+  scale_fill_manual(values= c("mediumblue","royalblue4","midnightblue", "navy","mediumpurple4","mediumorchid4",
+                              "magenta4","maroon"),name="Mean Wind speed ph (ms)", drop=F)+
+  ggtitle("Autumn") +
   theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), 
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
