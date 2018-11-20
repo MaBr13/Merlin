@@ -23,7 +23,9 @@ for(k in 1:length(Allyears)){
 library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
-#set the time on your computer to match
+#sunset and sunrise in UTC
+sunset <- c(20071013165100, 20071020163600,20081030161400,20080328180800,20100316164600)
+sunrise <-c(20071014060300,20071021061500,20081031063500,20080329052100,20100317045100)
 
 #SELECT DAYS WITH HIGH MIGRATION
 Oct1a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
@@ -52,9 +54,10 @@ for (k in 1:length(DaysA)){
 for(k in 1:length(DaysA)){{
   s <- as.data.frame(DaysA[[k]])
   datetime <- paste0(format(s[1,15], format="%Y-%m-%d"))
-  plot <-  ggplot(DaysA[[k]],aes(DaysA[[k]]$timestep,DaysA[[k]]$light)) +
-    geom_col(aes(colour=DaysA[[k]]$Aspeed, fill=DaysA[[k]]$Aspeed), show.legend = T) +
-   # geom_rect(data = s, aes(xmin=as.numeric(s[1,16]),xmax=as.numeric(s[1,16])+24,ymin=0,ymax=Inf,fill=s$light))+
+  plot <-  ggplot(DaysA[[k]],aes(DaysA[[k]]$timestep)) +
+    geom_bar(aes(colour=DaysA[[k]]$Aspeed, fill=DaysA[[k]]$Aspeed), show.legend = T) +
+    annotate("rect",xmin = ymd_hms(sunrise[k]), xmax = ymd_hms(sunset[k]), 
+             ymin = 0, ymax = Inf, fill="navy",alpha=0.2 )+
     scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
     scale_colour_manual(values  = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
     ggtitle(paste("Number of tracks per hour",' ', datetime,sep='')) +
@@ -64,10 +67,11 @@ for(k in 1:length(DaysA)){{
           axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(1,1,1,1), "cm"),
           plot.title = element_text(size = 18, face = "bold"))
   ggsave(filename=paste('Nrtrasp','_',datetime, ".png", sep=''), 
-         path="C:/Users/mbradar/Documents/Merlin/OWEZ/plots/horizontal/Hourly",height=9,width=12,dpi=72)
+         path="C:/Users/Maja/Documents/plots_OWEZ",height=9,width=12,dpi=72)
 }
   print(plot)
 }
+
 
 ###SEE HOW THE DIRECTION CHANGES DURING THE COURSE OF THE NIGHT
 for(k in 1:length(DaysM)){{
