@@ -13,59 +13,48 @@ for (k in 1:length(Allyears)){
   
 }
 
-#SELECT DAYS WITH HIGH MIGRATION
-Oct1a <- subset(Allyears[[1]], date=="2007-10-13", select = id:Wspeed)
-Oct2a <- subset(Allyears[[1]], date=="2007-10-20", select = id:Wspeed)
-Oct3a <- subset(Allyears[[2]], date=="2008-10-30", select = id:Wspeed)
-Mar1a <- subset(Allyears[[2]], date=="2008-03-28", select = id:Wspeed)
-Mar2a <- subset(Allyears[[4]], date=="2010-03-16", select = id:Wspeed)
 
-Oct1m <- subset(means[[1]], date=="2007-10-13", select = Timestamp:Rlight)
-Oct2m <- subset(means[[1]], date=="2007-10-20", select = Timestamp:Rlight)
-Oct3m <- subset(means[[2]], date=="2008-10-30", select = Timestamp:Rlight)
-Mar1m <- subset(means[[2]], date=="2008-03-28", select = Timestamp:Rlight)
-Mar2m <- subset(means[[4]], date=="2010-03-16", select = Timestamp:Rlight)
+library(lubridate)
+for(k in 1:length(Allyears)){
+  Allyears[[k]]$date <- with(Allyears[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
+  Allyears[[k]]$timestep <- with(Allyears[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+}
+
+library(lubridate)
+Sys.setenv(TZ="UTC")
+Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
+#set the time on your computer to match
+
+#SELECT DAYS WITH HIGH MIGRATION
+Oct1a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
+Oct2a <- subset(Allyears[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC", select = id:Wspeed)
+Oct3a <- subset(Allyears[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC", select = id:Wspeed)
+Mar1a <- subset(Allyears[[2]], timestep>="2008-03-28 16:00:00 UTC" & timestep<="2008-03-29 16:00:00 UTC", select = id:Wspeed)
+Mar2a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
+
+Oct1m <- subset(means[[1]], Timestamp>"2007-10-13 16:00:00" & Timestamp<"2007-10-14 16:00:00", select = Timestamp:Rlight)
+Oct2m <- subset(means[[1]], Timestamp>"2007-10-20 16:00:00" & Timestamp<"2007-10-21 16:00:00", select = Timestamp:Rlight)
+Oct3m <- subset(means[[2]], Timestamp>"2008-10-30 16:00:00" & Timestamp<"2008-10-31 16:00:00", select = Timestamp:Rlight)
+Mar1m <- subset(means[[2]], Timestamp>"2008-03-28 16:00:00" & Timestamp<"2008-03-29 16:00:00", select = Timestamp:Rlight)
+Mar2m <- subset(means[[4]], Timestamp>"2010-03-16 16:00:00" & Timestamp<"2010-03-17 16:00:00", select = Timestamp:Rlight)
+
 
 DaysA <- list(Oct1a,Oct2a,Oct3a,Mar1a,Mar2a)
 DaysM <- list(Oct1m,Oct2m,Oct3m,Mar1m,Mar2m)
+library(dplyr)
+for (k in 1:length(DaysA)){
+ DaysA[[k]] <- DaysA[[k]] %>% arrange(timestep)
+}
 
-####CALCULATE NEW WIND DIRECTION (DIRECTION THE WIND BLOWS TO)
-for (k in 1:length(DaysM)){
-  
-  
-  DaysM[[k]]$new.winddir <- ifelse(DaysM[[k]]$Mean.wdir<180.0001,DaysM[[k]]$Mean.wdir+180,DaysM[[k]]$Mean.wdir-180)  
-}
-####CALCULATE REAL HEADING
 
-for (k in 1:length(DaysM)){
-  
-  DaysM[[k]]$groundspeedms <- DaysM[[k]]$Mean.speed/3.6
-  DaysM[[k]]$windspeedms <- DaysM[[k]]$Mean.wspeed/3.6
-  trackheadingR <- DaysM[[k]]$Mean.head*(pi/180)#formula for conversion to radians
-  winddirR <- DaysM[[k]]$new.winddir*(pi/180)
-  strack<- sin(trackheadingR)#calculate sinus and cosinus of track and wind direction
-  ctrack <- cos(trackheadingR)
-  swind <- sin(winddirR)
-  cwind <- cos(winddirR)
-  
-  xa <- (DaysM[[k]]$groundspeedms*strack)-(DaysM[[k]]$windspeedms*swind)
-  ya <- (DaysM[[k]]$groundspeedms*ctrack)-(DaysM[[k]]$windspeedms*cwind)
-  
-  heading<- atan2(xa,ya)
-  DaysM[[k]]$airspeedms<-sqrt((xa^2)+(ya^2)) 
-  DaysM[[k]]$r.heading <- heading*(180/pi)#formula for conversion back to angles
-  
-}
-####GET RID OF NEGATIVE HEADING VALUES
-for(k in 1:length(DaysM)){
-  DaysM[[k]]$b.heading <-  ifelse(DaysM[[k]]$r.heading<0, 360+DaysM[[k]]$r.heading, DaysM[[k]]$r.heading)
-}
+
 ###PLOT NUMBER OF TRACKS AND COMPOSITION OF MIGRANTS (to see how it changes during the course of the night)
 for(k in 1:length(DaysA)){{
   s <- as.data.frame(DaysA[[k]])
   datetime <- paste0(format(s[1,15], format="%Y-%m-%d"))
-  plot <-  ggplot(DaysA[[k]], aes(uur,id)) +
+  plot <-  ggplot(DaysA[[k]],aes(DaysA[[k]]$timestep,DaysA[[k]]$light)) +
     geom_col(aes(colour=DaysA[[k]]$Aspeed, fill=DaysA[[k]]$Aspeed), show.legend = T) +
+   # geom_rect(data = s, aes(xmin=as.numeric(s[1,16]),xmax=as.numeric(s[1,16])+24,ymin=0,ymax=Inf,fill=s$light))+
     scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
     scale_colour_manual(values  = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
     ggtitle(paste("Number of tracks per hour",' ', datetime,sep='')) +
@@ -84,7 +73,7 @@ for(k in 1:length(DaysA)){{
 for(k in 1:length(DaysM)){{
   s <- as.data.frame(DaysM[[k]])
   datetime <- paste0(format(s[1,6], format="%Y-%m-%d"))
-plot <- ggplot(DaysM[[k]], aes(Timestamp,b.head)) + 
+plot <- ggplot(DaysM[[k]], aes(Timestamp,b.heading)) + 
   geom_line(colour="cyan3",size=1.5) +
   geom_point(colour="darkcyan",size=3)+
   ggtitle(paste("Track direction per hour",' ', datetime,sep='')) + 
@@ -96,3 +85,11 @@ ggsave(filename=paste('trdirph','_',datetime, ".png", sep=''),
 }
   print(plot)
 }
+
+ggplot(DaysM[[2]], aes(Timestamp,b.heading)) + 
+  geom_line(colour="cyan3",size=1.5) +
+  geom_point(colour="darkcyan",size=3)+
+  ggtitle(paste("Track direction per hour",' ', datetime,sep='')) + 
+  ylab("heading (degrees)")+ylim(0,360)+xlab("Hour")+
+  theme(axis.title.y = element_text(size=14), axis.title.x = element_blank(), 
+        plot.title = element_text(size = 16),plot.margin = unit(c(1,1,1,1), "cm"))
