@@ -24,8 +24,15 @@ library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 #sunset and sunrise in UTC
-sunset <- c(20071013165100, 20071020163600,20081030161400,20080328180800,20100316164600)
-sunrise <-c(20071014060300,20071021061500,20081031063500,20080329052100,20100317045100)
+sunset <- c(20071013165100, 20071020163600,20081030161400,20080328180800,20100316174600)
+sunrise <-c(20071014060300,20071021061500,20081031063500,20080329052100,20100317055100)
+
+sun <- list()
+
+for (k in 1:length(DaysA)){
+  sun <- getSunlightTimes(DaysA[[k]]$date,52.60636,4.389639,keep = c("sunrise","sunset"),tz="UTC")
+}
+
 
 #SELECT DAYS WITH HIGH MIGRATION
 Oct1a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
@@ -48,7 +55,7 @@ for (k in 1:length(DaysA)){
  DaysA[[k]] <- DaysA[[k]] %>% arrange(timestep)
 }
 
-
+as.numeric(as.character(s[1,16]))
 
 ###PLOT NUMBER OF TRACKS AND COMPOSITION OF MIGRANTS (to see how it changes during the course of the night)
 for(k in 1:length(DaysA)){{
@@ -67,7 +74,7 @@ for(k in 1:length(DaysA)){{
           axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(1,1,1,1), "cm"),
           plot.title = element_text(size = 18, face = "bold"))
   ggsave(filename=paste('Nrtrasp','_',datetime, ".png", sep=''), 
-         path="C:/Users/Maja/Documents/plots_OWEZ",height=9,width=12,dpi=72)
+         path="C:/Users/mbradar/Documents/MERLIN/OWEZ/plots/horizontal",height=9,width=12,dpi=72)
 }
   print(plot)
 }
