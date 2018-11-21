@@ -24,8 +24,8 @@ library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 #sunset and sunrise in UTC
-sunset <- c(20071013165100, 20071020163600,20081030161400,20080328180800,20100316174600)
-sunrise <-c(20071014060300,20071021061500,20081031063500,20080329052100,20100317055100)
+sunset <- c(20071013165100, 20071020163600,20081030161400,20080327180800,20080328180800,20100316174600)
+sunrise <-c(20071014060300,20071021061500,20081031063500,20080328052100,20080329052100,20100317055100)
 
 library(suncalc)
 sun <- list()
@@ -39,24 +39,25 @@ for (k in 1:length(DaysA)){
 Oct1a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
 Oct2a <- subset(Allyears[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC", select = id:Wspeed)
 Oct3a <- subset(Allyears[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC", select = id:Wspeed)
-Mar1a <- subset(Allyears[[2]], timestep>="2008-03-28 16:00:00 UTC" & timestep<="2008-03-29 16:00:00 UTC", select = id:Wspeed)
-Mar2a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
+Mar1a <- subset(Allyears[[2]], timestep>="2008-03-27 16:00:00 UTC" & timestep<="2008-03-28 16:00:00 UTC", select = id:Wspeed)
+Mar2a <- subset(Allyears[[2]], timestep>="2008-03-28 16:00:00 UTC" & timestep<="2008-03-29 16:00:00 UTC", select = id:Wspeed)
+Mar3a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
 
 Oct1m <- subset(means[[1]], Timestamp>"2007-10-13 16:00:00" & Timestamp<"2007-10-14 16:00:00", select = Timestamp:Rlight)
 Oct2m <- subset(means[[1]], Timestamp>"2007-10-20 16:00:00" & Timestamp<"2007-10-21 16:00:00", select = Timestamp:Rlight)
 Oct3m <- subset(means[[2]], Timestamp>"2008-10-30 16:00:00" & Timestamp<"2008-10-31 16:00:00", select = Timestamp:Rlight)
-Mar1m <- subset(means[[2]], Timestamp>"2008-03-28 16:00:00" & Timestamp<"2008-03-29 16:00:00", select = Timestamp:Rlight)
-Mar2m <- subset(means[[4]], Timestamp>"2010-03-16 16:00:00" & Timestamp<"2010-03-17 16:00:00", select = Timestamp:Rlight)
+Mar1m <- subset(means[[2]], Timestamp>"2008-03-27 16:00:00" & Timestamp<"2008-03-28 16:00:00", select = Timestamp:Rlight)
+Mar2m <- subset(means[[2]], Timestamp>"2008-03-28 16:00:00" & Timestamp<"2008-03-29 16:00:00", select = Timestamp:Rlight)
+Mar3m <- subset(means[[4]], Timestamp>"2010-03-16 16:00:00" & Timestamp<"2010-03-17 16:00:00", select = Timestamp:Rlight)
 
 
-DaysA <- list(Oct1a,Oct2a,Oct3a,Mar1a,Mar2a)
-DaysM <- list(Oct1m,Oct2m,Oct3m,Mar1m,Mar2m)
+DaysA <- list(Oct1a,Oct2a,Oct3a,Mar1a,Mar2a,Mar3a)
+DaysM <- list(Oct1m,Oct2m,Oct3m,Mar1m,Mar2m,Mar3m)
 library(dplyr)
 for (k in 1:length(DaysA)){
  DaysA[[k]] <- DaysA[[k]] %>% arrange(timestep)
 }
 
-as.numeric(as.character(s[1,16]))
 
 ###PLOT NUMBER OF TRACKS AND COMPOSITION OF MIGRANTS (to see how it changes during the course of the night)
 for(k in 1:length(DaysA)){{
