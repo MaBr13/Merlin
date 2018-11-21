@@ -27,6 +27,7 @@ Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set t
 sunset <- c(20071013165100, 20071020163600,20081030161400,20080328180800,20100316174600)
 sunrise <-c(20071014060300,20071021061500,20081031063500,20080329052100,20100317055100)
 
+library(suncalc)
 sun <- list()
 
 for (k in 1:length(DaysA)){
