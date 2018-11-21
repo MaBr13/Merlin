@@ -18,6 +18,10 @@ for(k in 1:length(Allyears)){
   Allyears[[k]]$timestep <- with(Allyears[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
 }
 
+library(lubridate)
+Sys.setenv(TZ="UTC")
+Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
+
 #SELECT DAYS WITH HIGH MIGRATION
 Oct1a <- subset(Allyears[[1]], timestep>"2007-10-13 16:00:00" & timestep<"2007-10-14 16:00:00" , select = id:Wspeed)
 Oct2a <- subset(Allyears[[1]], timestep>"2007-10-20 16:00:00" & timestep<"2007-10-21 16:00:00", select = id:Wspeed)
@@ -34,7 +38,14 @@ Mar2m <- subset(means[[4]], Timestamp>"2010-03-16 16:00:00" & Timestamp<"2010-03
 DaysA <- list(Oct1a,Oct2a,Oct3a,Mar1a,Mar2a)
 DaysM <- list(Oct1m,Oct2m,Oct3m,Mar1m,Mar2m)
 
+library(dplyr)
+for (k in 1:length(DaysA)){
+  DaysA[[k]] <- DaysA[[k]] %>% arrange(timestep)
+}
 
+for (k in 1:length(DaysM)){
+  DaysM[[k]] <- DaysM[[k]] %>% arrange(Timestamp)
+}
 
 ####CALCULATE NEW WIND DIRECTION (DIRECTION THE WIND BLOWS TO)
 for (k in 1:length(DaysM)){
