@@ -118,6 +118,7 @@ counts <- list()
 mean.grspeed <- list()
 mean.aspeed <- list()
 mean.wspeed <- list()
+mean.tr.dir <- list()
 mean.heading <- list()
 mean.winddir <- list()
 date <- list()
@@ -133,6 +134,7 @@ l <- list()
 b <- list()
 e <- list()
 f <- list()
+r <- list()
 means <- list()
 month <- list()
 
@@ -141,7 +143,8 @@ for(k in 1:length(Allyears)){
   mean.grspeed[[k]] <- aggregate(Allyears[[k]]$groundspeedms, by = list(Allyears[[k]]$timestep), FUN="mean")
   mean.aspeed[[k]] <- aggregate(Allyears[[k]]$airspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
   mean.wspeed[[k]] <- aggregate(Allyears[[k]]$windspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.heading[[k]] <- aggregate(Allyears[[k]]$trackheading, by=list(Allyears[[k]]$timestep), FUN="mean")
+  mean.tr.dir[[k]] <- aggregate(Allyears[[k]]$trackheading, by=list(Allyears[[k]]$timestep), FUN="mean")
+  mean.heading[[k]] <- aggregate(Allyears[[k]]$b.heading, by=list(Allyears[[k]]$timestep), FUN="mean")
   mean.winddir[[k]] <- aggregate(Allyears[[k]]$new.winddir, by=list(Allyears[[k]]$timestep), FUN="mean")
   date[[k]]<- aggregate(Allyears[[k]]$date, by=list(Allyears[[k]]$timestep), FUN="median")
   month[[k]] <- aggregate(Allyears[[k]]$maand, by=list(Allyears[[k]]$timestep), FUN="median")
@@ -157,18 +160,19 @@ for(k in 1:length(Allyears)){
   s[[k]] <- merge(mean.aspeed[[k]],mean.wspeed[[k]],by="Group.1", sort=TRUE)
   names(s[[k]])[c(1,2,3)] <- paste(c("Timestamp","Mean.aspeed", "Mean.wspeed"))
   p[[k]] <- merge(mean.heading[[k]],mean.winddir[[k]],by="Group.1", sort=TRUE)
-  names(p[[k]])[c(1,2,3)] <- paste(c("Timestamp","Mean.head", "Mean.wdir"))
+  r[[k]] <- merge(p[[k]],mean.tr.dir[[k]],by="Group.1",sort=TRUE)
+  names(r[[k]])[c(1,2,3,4)] <- paste(c("Timestamp","Mean.head", "Mean.wdir", "Mean.tr.dir"))
   a[[k]]<- merge(g[[k]], date[[k]], by="Group.1", sort = TRUE)
   names(a[[k]])[c(1,2,3,4)]<-paste(c("Timestamp","Nr.tracks", "Mean.speed", "Date"))
-  d[[k]] <- merge(s[[k]],p[[k]],by="Timestamp", sort = TRUE )
+  d[[k]] <- merge(s[[k]],r[[k]],by="Timestamp", sort = TRUE )
   l [[k]] <- merge(a[[k]],d[[k]],by="Timestamp", sort=TRUE)
   b[[k]] <- merge(dayP[[k]],month[[k]], by="Timestamp", sort=TRUE)
   e[[k]] <- merge(light[[k]],season[[k]],by="Timestamp", sort=TRUE)
   f[[k]] <- merge(b[[k]],l[[k]], by="Timestamp", sort=TRUE)
   means[[k]] <- merge(f[[k]],e[[k]], by="Timestamp", sort=TRUE)
 }
-rm(list =c("counts","mean.grspeed", "mean.aspeed", "mean.wspeed","mean.heading" ,"mean.winddir","date", 
-           "season","light","dayP","g", "s" ,"p" ,"a" ,"d","l" ,"b" ,"e" ,"f" ,"month")) 
+rm(list =c("counts","mean.grspeed", "mean.aspeed", "mean.wspeed","mean.heading" ,"mean.tr.dir","mean.winddir","date", 
+           "season","light","dayP","g", "s" ,"p" ,"a" ,"d","l" ,"r","b" ,"e" ,"f" ,"month")) 
 
 #cut(capture.output(print(means),file="means.csv"))#if you want to save the table as csv
 ##########################################################
@@ -228,8 +232,8 @@ for(k in 1:length(Allyears)){
 #categories wind speed
 for(k in 1:length(Allyears)){
   
-  Allyears[[k]]$Wspeed<- cut(Allyears[[k]]$windspeedms,breaks=c(0,10,15,20,30,40,50), 
-                          labels = c("0-10","10-15","15-20","20-30", "30-40", ">40"))
+  Allyears[[k]]$Wspeed<- cut(Allyears[[k]]$windspeedms,breaks=c(0,5,10,15,20,25,30,35,40,50), 
+                          labels = c("0-5","5-10","10-15","15-20","20-25","25-30","30-35", "35-40", ">40"))
   
 }
 
@@ -272,7 +276,6 @@ for(k in 1:length(Allyears)){
 }
 
 
-z <- subset(SpringAll[[3]], new.winddir<0, select=id:Wspeed)
 
 
 
