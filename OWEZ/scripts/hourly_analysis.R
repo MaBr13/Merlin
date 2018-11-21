@@ -24,8 +24,8 @@ library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 #sunset and sunrise in UTC
-sunset <- c(20071013165100, 20071020163600,20081030161400,20080327180800,20080328180800,20100316174600)
-sunrise <-c(20071014060300,20071021061500,20081031063500,20080328052100,20080329052100,20100317055100)
+sunset <- c(20071010170100,20071013165100,20071018164300,20071019164100,20071020163600,20081029000000,20081029161900,20081030161400,20080327180800,20090313174300,20090316174900,20100316174600,20100321175700,20100322054100)
+sunrise <-c(20071011060100,20071014060300,20071019061500,20071020061700,20071021061500,20081029063500,20081030063700,20081031063500,20080328052100,20090314060000,20090317055300,20100317055100,20100322054100,20100323053900)
 
 library(suncalc)
 sun <- list()
@@ -36,23 +36,42 @@ for (k in 1:length(DaysA)){
 
 
 #SELECT DAYS WITH HIGH MIGRATION
-Oct1a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
-Oct2a <- subset(Allyears[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC", select = id:Wspeed)
-Oct3a <- subset(Allyears[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC", select = id:Wspeed)
+#SELECT DAYS WITH HIGH MIGRATION
+#SELECT DAYS WITH HIGH MIGRATION
+Oct1a <- subset(Allyears[[1]], timestep>="2007-10-10 16:00:00" & timestep<="2007-10-11 16:00:00", select = id:Wspeed)
+Oct2a <- subset(Allyears[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = id:Wspeed)
+Oct3a <- subset(Allyears[[1]], timestep>="2007-10-18 16:00:00" & timestep<="2007-10-19 16:00:00", select = id:Wspeed)
+Oct4a<- subset(Allyears[[1]], timestep>="2007-10-19 16:00:00" & timestep<="2007-10-20 16:00:00", select = id:Wspeed)
+Oct5a <- subset(Allyears[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC", select = id:Wspeed)
+Oct6a <- subset(Allyears[[2]], timestep>="2008-10-28 16:00:00" & timestep<="2008-10-29 16:00:00", select = id:Wspeed)
+Oct7a <- subset(Allyears[[2]], timestep>="2008-10-29 16:00:00" & timestep<="2008-10-30 16:00:00", select = id:Wspeed)
+Oct8a <- subset(Allyears[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC", select = id:Wspeed)
 Mar1a <- subset(Allyears[[2]], timestep>="2008-03-27 16:00:00 UTC" & timestep<="2008-03-28 16:00:00 UTC", select = id:Wspeed)
-Mar2a <- subset(Allyears[[2]], timestep>="2008-03-28 16:00:00 UTC" & timestep<="2008-03-29 16:00:00 UTC", select = id:Wspeed)
-Mar3a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
+Mar2a <- subset(Allyears[[3]], timestep>="2009-03-13 16:00:00" & timestep<="2009-03-14 16:00:00", select = id:Wspeed)
+Mar3a <- subset(Allyears[[3]], timestep>="2009-03-16 16:00:00" & timestep<="2009-03-17 16:00:00", select = id:Wspeed)
+Mar4a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
+Mar5a <- subset(Allyears[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00" , select = id:Wspeed)
+Mar6a<- subset(Allyears[[4]], timestep>="2010-03-22 16:00:00" & timestep<="2010-03-23 16:00:00", select = id:Wspeed)
 
-Oct1m <- subset(means[[1]], Timestamp>"2007-10-13 16:00:00" & Timestamp<"2007-10-14 16:00:00", select = Timestamp:Rlight)
-Oct2m <- subset(means[[1]], Timestamp>"2007-10-20 16:00:00" & Timestamp<"2007-10-21 16:00:00", select = Timestamp:Rlight)
-Oct3m <- subset(means[[2]], Timestamp>"2008-10-30 16:00:00" & Timestamp<"2008-10-31 16:00:00", select = Timestamp:Rlight)
-Mar1m <- subset(means[[2]], Timestamp>"2008-03-27 16:00:00" & Timestamp<"2008-03-28 16:00:00", select = Timestamp:Rlight)
-Mar2m <- subset(means[[2]], Timestamp>"2008-03-28 16:00:00" & Timestamp<"2008-03-29 16:00:00", select = Timestamp:Rlight)
-Mar3m <- subset(means[[4]], Timestamp>"2010-03-16 16:00:00" & Timestamp<"2010-03-17 16:00:00", select = Timestamp:Rlight)
+Oct1m <- subset(means[[1]], Timestamp>="2007-10-10 16:00:00" & Timestamp<="2007-10-11 16:00:00", select = Timestamp:Rlight)
+Oct2m <- subset(means[[1]], Timestamp>="2007-10-13 16:00:00 UTC" & Timestamp<="2007-10-14 16:00:00 UTC" , select = Timestamp:Rlight)
+Oct3m <- subset(means[[1]], Timestamp>="2007-10-18 16:00:00" & Timestamp<="2007-10-19 16:00:00", select = Timestamp:Rlight)
+Oct4m<- subset(means[[1]], Timestamp>="2007-10-19 16:00:00" & Timestamp<="2007-10-20 16:00:00", select = Timestamp:Rlight)
+Oct5m <- subset(means[[1]], Timestamp>="2007-10-20 16:00:00 UTC" & Timestamp<="2007-10-21 16:00:00 UTC", select = Timestamp:Rlight)
+Oct6m <- subset(means[[2]], Timestamp>="2008-10-28 16:00:00" & Timestamp<="2008-10-29 16:00:00", select = Timestamp:Rlight)
+Oct7m <- subset(means[[2]], Timestamp>="2008-10-29 16:00:00" & Timestamp<="2008-10-30 16:00:00", select = Timestamp:Rlight)
+Oct8m <- subset(means[[2]], Timestamp>="2008-10-30 16:00:00 UTC" & Timestamp<="2008-10-31 16:00:00 UTC", select = Timestamp:Rlight)
+Mar1m <- subset(means[[2]], Timestamp>="2008-03-27 16:00:00 UTC" & Timestamp<="2008-03-28 16:00:00 UTC", select = Timestamp:Rlight)
+Mar2m <- subset(means[[3]], Timestamp>="2009-03-13 16:00:00" & Timestamp<="2009-03-14 16:00:00", select = Timestamp:Rlight)
+Mar3m <- subset(means[[3]], Timestamp>="2009-03-16 16:00:00" & Timestamp<="2009-03-17 16:00:00", select = Timestamp:Rlight)
+Mar4m <- subset(means[[4]], Timestamp>="2010-03-16 16:00:00 UTC" & Timestamp<="2010-03-17 16:00:00 UTC", select = Timestamp:Rlight)
+Mar5m <- subset(means[[4]], Timestamp>="2010-03-21 16:00:00" & Timestamp<="2010-03-22 16:00:00" , select = Timestamp:Rlight)
+Mar6m<- subset(means[[4]], Timestamp>="2010-03-22 16:00:00" & Timestamp<="2010-03-23 16:00:00", select = Timestamp:Rlight)
 
 
-DaysA <- list(Oct1a,Oct2a,Oct3a,Mar1a,Mar2a,Mar3a)
-DaysM <- list(Oct1m,Oct2m,Oct3m,Mar1m,Mar2m,Mar3m)
+DaysA <- list(Oct1a,Oct2a,Oct3a,Oct4a,Oct5a,Oct6a,Oct7a,Oct8a,Mar1a,Mar2a,Mar3a,Mar4a,Mar5a,Mar6a)
+DaysM <- list(Oct1m,Oct2m,Oct3m,Oct4m,Oct5m,Oct6m,Oct7m,Oct8m,Mar1m,Mar2m,Mar3m,Mar4m,Mar5m,Mar6m)
+
 library(dplyr)
 for (k in 1:length(DaysA)){
  DaysA[[k]] <- DaysA[[k]] %>% arrange(timestep)
