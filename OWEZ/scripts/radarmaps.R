@@ -18,6 +18,16 @@ K14 <- c(53.26889,3.628889)
 Luchterduinen <- c(52.41667,4.166667)
 Thornton <- c(51.5328,2.95509)
 Den_Helder <- c(52.9563,4.7608)
+De_Bilt <- c(52.1017, 5.1783)
+Herwijnen <- c(51.83708 ,5.13797)
+Zaventum <- c(50.9054, 4.4579)
+Jabbeke <- c(51.1919, 3.0641)
+Borkum <- c(53.5640, 6.7482)
+Emden <- c(53.3387 ,7.0237)
+Boostedt <- c(54.0043 ,10.0468)
+Rostock <- c(54.1757, 12.058)
+
+
 
 Radars <- as.data.frame(rbind(OWEZ,K14,Luchterduinen, Thornton, Den_Helder))
 names <- c("OWEZ","K14","Luchterduinen","Thornton", "Den Helder")
