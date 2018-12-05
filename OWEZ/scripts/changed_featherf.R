@@ -4,6 +4,8 @@ feather.plot2 <- function (r, theta,xpos,colour, yref = 0, use.arrows = TRUE, co
 {
   if (missing(xpos))
    xpos <- 1:length(theta)
+  if (fp.type == "m") 
+    theta <- 5 * pi/2 - theta
   x <- r * cos(theta)
   y <- r * sin(theta)
   xmult <- diff(range(xpos))/(diff(range(y)) * 2)
