@@ -3,13 +3,13 @@
 ##################################################
 ###Bradaric Maja, UvA, 17.07.2018
 
-path <- setwd("C:/Users/Maja/Documents/OWEZ data/horizontal")
+path <- setwd("C:/Users/mbradar/Documents/MERLIN/OWEZ/data/horizontal/bigger tables")
 listcsv <- dir(path,pattern = "*.csv",ignore.case = FALSE)
 #getting yearly data files
-Fstyear <- listcsv[1:7]
-Syear <- listcsv[8:19]
-Tyear <- listcsv[19:25]
-Fyear <- listcsv[26:29]
+Fstyear <- listcsv[1:9]
+Syear <- listcsv[10:21]
+Tyear <- listcsv[22:28]
+Fyear <- listcsv[29:31]
 ##including only columns of interest##
 #in one file
 Monthdata <- read.csv("trackplusinfo200707.csv",sep=';')#[,c("trackid", "jaar","maand", "dag", "uur","minuut",
@@ -126,10 +126,4 @@ for (k in 1:length(Allyears)){
   Allyears[[k]]$migr.day <- with(Allyears[[k]],ymd_h(paste(n.year,n.month,n.day,uur,sep = ' '))) 
 }
 
-
-AllyearsN <- list()
-
-for (k in 1:length(Allyears)){
-  AllyearsN[[k]] <- subset(Allyears[[k]],light==1,select=id:Wspeed)
-}
 
