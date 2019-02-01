@@ -8,7 +8,7 @@
 
 means.migr <- list()
 means.b.mid <- lapply(1:4, function(n){
-  AllyearsN[[n]] %>%
+  Allyears[[n]] %>%
     group_by(n.date) %>%
     summarise(Nr.tracks=length(id),Mean.speed=mean(groundspeedms),Mean.aspeed=mean(airspeedms),
               Mean.wspeed=mean(windspeedms), 
@@ -60,33 +60,7 @@ for(k in 1:length(means.migr)){
                                 labels = c("0","1"))}
 
 
-##########################################################
-#############manipulations with AllyearsN table###############
 
-#categories according to air speed
-for(k in 1:length(AllyearsN)){
-  
-  AllyearsN[[k]]$Aspeed<- cut(AllyearsN[[k]]$airspeedms,breaks=c(0,12,15,18,27,45), 
-                              labels = c("0-12","12-15","15-18", "18-27", ">27"))
-  
-}
-#categories wind speed
-for(k in 1:length(AllyearsN)){
-  
-  AllyearsN[[k]]$Wspeed<- cut(AllyearsN[[k]]$windspeedms,breaks=c(0,5,10,15,20,25,30,35,40,50), 
-                              labels = c("0-5","5-10","10-15","15-20","20-25","25-30","30-35", "35-40", ">40"))
-  
-}
-
-#mark NAs with a category
-library(dplyr)   # gives mutate_if
-library(forcats) # gives fct_explicit_na
-library(magrittr) # for piping
-
-for(k in 1:length(AllyearsN)){
-  AllyearsN[[k]] %<>% mutate(Aspeed = fct_explicit_na(AllyearsN[[k]]$Aspeed, na_level = "Data n/a"))
-  AllyearsN[[k]] %<>% mutate(Wspeed = fct_explicit_na(AllyearsN[[k]]$Wspeed, na_level = "Data n/a"))
-}
 
 ####dividing data by season
 #mean values
@@ -101,17 +75,4 @@ Autumn <- list()
 for(k in 1:length(means.migr)){
   
   Autumn[[k]] <- subset(means.migr[[k]], Season==4, select=Timestamp:Rlight)
-}
-#total values
-SpringAll <- list()
-for(k in 1:length(AllyearsN)){
-  
-  SpringAll[[k]] <- subset(AllyearsN[[k]], season==2, select=id:Wspeed)
-}
-
-AutumnAll <- list()
-
-for(k in 1:length(AllyearsN)){
-  
-  AutumnAll[[k]] <- subset(AllyearsN[[k]], season==4, select=id:Wspeed)
 }
