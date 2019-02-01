@@ -49,10 +49,10 @@ ggplot(AutumnAll[[2]], aes(x=trackheading)) +
   scale_fill_manual(values = c("grey","grey0","forestgreen","firebrick1","coral3", "maroon"), name="Air speed (m/s)", drop=F)+
   ggtitle(2008) + 
   ylab("Number of tracks")+ ylim(0,132000)+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  #theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
+   #     legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
+    #    axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
+     #   axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 #### PLOT A WIND ROSE OF BIRDS HEADINGS AND AIRSPEEDS IN SPRING
