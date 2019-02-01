@@ -25,15 +25,7 @@ for (k in 1:length(Autumn)){
   
 }
 
-for (k in 1:length(SpringAll)){
-  SpringAll[[k]]$Aspeed <- factor(SpringAll[[k]]$Aspeed, levels = rev(levels(SpringAll[[k]]$Aspeed)))
-  
-}
 
-for (k in 1:length(AutumnAll)){
-  AutumnAll[[k]]$Aspeed <- factor(AutumnAll[[k]]$Aspeed, levels = rev(levels(AutumnAll[[k]]$Aspeed)))
-  
-}
 
 #Wind speed
 
