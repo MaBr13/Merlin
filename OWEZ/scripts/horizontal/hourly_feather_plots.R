@@ -36,22 +36,22 @@ Mar2a <- subset(Allyears[[3]], timestep>="2009-03-13 16:00:00" & timestep<="2009
 Mar3a <- subset(Allyears[[3]], timestep>="2009-03-16 16:00:00" & timestep<="2009-03-17 16:00:00", select = id:Wspeed)
 Mar4a <- subset(Allyears[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = id:Wspeed)
 Mar5a <- subset(Allyears[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00" , select = id:Wspeed)
-Mar6a<- subset(Allyears[[4]], timestep>="2010-03-22 16:00:00" & timestep<="2010-03-23 16:00:00", select = id:Wspeed)
+Mar6a<- subset(Allyears[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00", select = id:Wspeed)
 
-Oct1m <- subset(means[[1]], Timestamp>="2007-10-10 16:00:00" & Timestamp<="2007-10-11 16:00:00", select = Timestamp:Rlight)
-Oct2m <- subset(means[[1]], Timestamp>="2007-10-13 16:00:00 UTC" & Timestamp<="2007-10-14 16:00:00 UTC" , select = Timestamp:Rlight)
-Oct3m <- subset(means[[1]], Timestamp>="2007-10-18 16:00:00" & Timestamp<="2007-10-19 16:00:00", select = Timestamp:Rlight)
-Oct4m<- subset(means[[1]], Timestamp>="2007-10-19 16:00:00" & Timestamp<="2007-10-20 16:00:00", select = Timestamp:Rlight)
-Oct5m <- subset(means[[1]], Timestamp>="2007-10-20 16:00:00 UTC" & Timestamp<="2007-10-21 16:00:00 UTC", select = Timestamp:Rlight)
-Oct6m <- subset(means[[2]], Timestamp>="2008-10-28 16:00:00" & Timestamp<="2008-10-29 16:00:00", select = Timestamp:Rlight)
-Oct7m <- subset(means[[2]], Timestamp>="2008-10-29 16:00:00" & Timestamp<="2008-10-30 16:00:00", select = Timestamp:Rlight)
-Oct8m <- subset(means[[2]], Timestamp>="2008-10-30 16:00:00 UTC" & Timestamp<="2008-10-31 16:00:00 UTC", select = Timestamp:Rlight)
-Mar1m <- subset(means[[2]], Timestamp>="2008-03-27 16:00:00 UTC" & Timestamp<="2008-03-28 16:00:00 UTC", select = Timestamp:Rlight)
-Mar2m <- subset(means[[3]], Timestamp>="2009-03-13 16:00:00" & Timestamp<="2009-03-14 16:00:00", select = Timestamp:Rlight)
-Mar3m <- subset(means[[3]], Timestamp>="2009-03-16 16:00:00" & Timestamp<="2009-03-17 16:00:00", select = Timestamp:Rlight)
-Mar4m <- subset(means[[4]], Timestamp>="2010-03-16 16:00:00 UTC" & Timestamp<="2010-03-17 16:00:00 UTC", select = Timestamp:Rlight)
-Mar5m <- subset(means[[4]], Timestamp>="2010-03-21 16:00:00" & Timestamp<="2010-03-22 16:00:00" , select = Timestamp:Rlight)
-Mar6m<- subset(means[[4]], Timestamp>="2010-03-22 16:00:00" & Timestamp<="2010-03-23 16:00:00", select = Timestamp:Rlight)
+Oct1m <- subset(means[[1]], Timestamp>="2007-10-10 16:00:00" & Timestamp<="2007-10-11 16:00:00", select = timestep:Rlight)
+Oct2m <- subset(means[[1]], Timestamp>="2007-10-13 16:00:00 UTC" & Timestamp<="2007-10-14 16:00:00 UTC", select = timestep:Rlight)
+Oct3m <- subset(means[[1]], Timestamp>="2007-10-18 16:00:00" & Timestamp<="2007-10-19 16:00:00", select = timestep:Rlight)
+Oct4m<- subset(means[[1]], Timestamp>="2007-10-19 16:00:00" & Timestamp<="2007-10-20 16:00:00", select = timestep:Rlight)
+Oct5m <- subset(means[[1]],  Timestamp>="2007-10-20 16:00:00 UTC" & Timestamp<="2007-10-21 16:00:00 UTC", select = timestep:Rlight)
+Oct6m <- subset(means[[2]], Timestamp>="2008-10-28 16:00:00" & Timestamp<="2008-10-29 16:00:00", select = timestep:Rlight)
+Oct7m <- subset(means[[2]], Timestamp>="2008-10-29 16:00:00" & Timestamp<="2008-10-30 16:00:00", select = timestep:Rlight)
+Oct8m <- subset(means[[2]], Timestamp>="2008-10-30 16:00:00 UTC" & Timestamp<="2008-10-31 16:00:00 UTC", select = timestep:Rlight)
+Mar1m <- subset(means[[2]], Timestamp>="2008-03-27 16:00:00 UTC" & Timestamp<="2008-03-28 16:00:00 UTC", select = timestep:Rlight)
+Mar2m <- subset(means[[3]], Timestamp>="2009-03-13 16:00:00" & Timestamp<="2009-03-14 16:00:00", select = timestep:Rlight)
+Mar3m <- subset(means[[3]], Timestamp>="2009-03-16 16:00:00" & Timestamp<="2009-03-17 16:00:00", select = timestep:Rlight)
+Mar4m <- subset(means[[4]],Timestamp>="2010-03-16 16:00:00 UTC" & Timestamp<="2010-03-17 16:00:00 UTC", select = timestep:Rlight)
+Mar5m <- subset(means[[4]], Timestamp>="2010-03-21 16:00:00" & Timestamp<="2010-03-22 16:00:00" , select = timestep:Rlight)
+Mar6m<- subset(means[[4]], Timestamp>="2010-03-22 16:00:00" & Timestamp<="2010-03-23 16:00:00", select = timestep:Rlight)
 
 
 DaysA <- list(Oct1a,Oct2a,Oct3a,Oct4a,Oct5a,Oct6a,Oct7a,Oct8a,Mar1a,Mar2a,Mar3a,Mar4a,Mar5a,Mar6a)
@@ -76,6 +76,12 @@ for (k in 1:length(DaysM)){
   DaysM[[k]]$tr.dir.rad <- DaysM[[k]]$Mean.tr.dir*(pi/180)
 }
 
+for (k in 1:length(DaysM)){
+  
+  DaysM[[k]]$winddir.rad <- as.numeric(DaysM[[k]]$winddir.rad )
+  DaysM[[k]]$heading.rad <- as.numeric(DaysM[[k]]$heading.rad)
+  DaysM[[k]]$tr.dir.rad <- as.numeric(DaysM[[k]]$tr.dir.rad )
+}
 
 library(dplyr)
 
@@ -118,17 +124,17 @@ for (k in 1:length(DaysM)){
 
 for (k in 1:length(DaysM)){
   s <- as.data.frame(DaysM[[k]])
-  datetime <- paste0(format(s[1,6], format="%Y-%m-%d"))
+  datetime <- paste0(format(s[1,13], format="%Y-%m-%d"))
   png(paste0("C:/Users/mbradar/Documents/Merlin/OWEZ/plots/horizontal/DaysM_heading",datetime,".png"),height=4,width=8,unit="in",res=500)
-  feather.plot2(DaysM[[k]]$Mean.aspeed,DaysM[[k]]$heading.rad, colour = DaysM[[k]]$Colour,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
+  feather.plot2(DaysM[[k]]$Nr.tracks,DaysM[[k]]$heading.rad, colour = DaysM[[k]]$Colour,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
   mtext("Heading", adj=0,side=3, line=0.5, cex=1, las=1)
   dev.off()
   png(paste0("C:/Users/mbradar/Documents/Merlin/OWEZ/plots/horizontal/DaysM_winds",datetime,".png"),height=4,width=8,unit="in",res=500)
-  feather.plot2(DaysM[[k]]$Mean.wspeed,DaysM[[k]]$winddir.rad ,colour= DaysM[[k]]$Colour1,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
+  feather.plot2(DaysM[[k]]$Nr.tracks,DaysM[[k]]$winddir.rad ,colour= DaysM[[k]]$Colour1,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
   mtext("Wind direction", adj=0,side=3, line=0.5, cex=1, las=1)
   dev.off()
   png(paste0("C:/Users/mbradar/Documents/Merlin/OWEZ/plots/horizontal/DaysM_trdir",datetime,".png"),height=4,width=8,unit="in",res=500)
-  feather.plot2(DaysM[[k]]$Mean.aspeed,DaysM[[k]]$tr.dir.rad ,colour=DaysM[[k]]$Colour,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
+  feather.plot2(DaysM[[k]]$Nr.tracks,DaysM[[k]]$tr.dir.rad ,colour=DaysM[[k]]$Colour,xlabels= DaysM[[k]]$Timestamp,fp.type = "m")
   mtext("Track direction", adj=0,side=3, line=0.5, cex=1, las=1)
   dev.off()
 }
