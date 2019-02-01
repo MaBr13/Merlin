@@ -1,71 +1,22 @@
 ############################################################
 ##########making table with means per hour##################
 
-###first run the script called "data_analysis_OWEZ_calendardays"
+###first run the script called "data_analysis_OWEZ_calendardays" or "data_analysis_migr.days"
+library(circular)
 
-counts <- list()
-mean.grspeed <- list()
-mean.aspeed <- list()
-mean.wspeed <- list()
-mean.tr.dir <- list()
-mean.heading <- list()
-mean.winddir <- list()
-date <- list()
-season <- list()
-light <- list()
-dayP <- list()
-g <- list()
-s <- list()
-p <- list()
-a <- list()
-d <- list()
-l <- list()
-b <- list()
-e <- list()
-f <- list()
-r <- list()
-means <- list()
-month <- list()
+means<- lapply(1:4, function(n){
+  Allyears[[n]] %>%
+    group_by(timestep) %>%
+    summarise(Nr.tracks=length(id),Mean.speed=mean(groundspeedms),Mean.aspeed=mean(airspeedms),
+              Mean.wspeed=mean(windspeedms), 
+              Mean.tr.dir=mean(circular(trackheading,type="angles", units="degrees",modulo="2pi", template='geographics')), 
+              Mean.head=mean(circular(b.heading,type="angles", units="degrees",modulo="2pi", template='geographics')),
+              Mean.wdir=mean(circular(new.winddir,type="angles", units="degrees",modulo="2pi", template='geographics')),
+              Month=median(n.month),Season=median(season),Light=median(light),DayP=median(dawndusk),
+              Timestamp=median(timestep),n.date=median(n.date),migr.day=median(migr.day))
+}) 
 
-for(k in 1:length(Allyears)){
-  counts[[k]] <- aggregate(Allyears[[k]]$id,by = list(Allyears[[k]]$timestep), FUN="length")
-  mean.grspeed[[k]] <- aggregate(Allyears[[k]]$groundspeedms, by = list(Allyears[[k]]$timestep), FUN="mean")
-  mean.aspeed[[k]] <- aggregate(Allyears[[k]]$airspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.wspeed[[k]] <- aggregate(Allyears[[k]]$windspeedms, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.tr.dir[[k]] <- aggregate(Allyears[[k]]$trackheading, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.heading[[k]] <- aggregate(Allyears[[k]]$b.heading, by=list(Allyears[[k]]$timestep), FUN="mean")
-  mean.winddir[[k]] <- aggregate(Allyears[[k]]$new.winddir, by=list(Allyears[[k]]$timestep), FUN="mean")
-  date[[k]]<- aggregate(Allyears[[k]]$date, by=list(Allyears[[k]]$timestep), FUN="median")
-  month[[k]] <- aggregate(Allyears[[k]]$maand, by=list(Allyears[[k]]$timestep), FUN="median")
-  names(month[[k]])[c(1,2)] <- paste(c("Timestamp","Month"))
-  season[[k]] <- aggregate(Allyears[[k]]$season, by=list(Allyears[[k]]$timestep), FUN="median")
-  names(season[[k]])[c(1,2)] <- paste(c("Timestamp","Season"))
-  light[[k]] <- aggregate(Allyears[[k]]$light, by=list(Allyears[[k]]$timestep), FUN="median")
-  names(light[[k]])[c(1,2)] <- paste(c("Timestamp","Light"))
-  dayP[[k]] <- aggregate(Allyears[[k]]$dawndusk, by=list(Allyears[[k]]$timestep), FUN="median")
-  names(dayP[[k]])[c(1,2)] <- paste(c("Timestamp","DayP"))
-  g[[k]] <- merge(counts[[k]], mean.grspeed[[k]], by="Group.1", sort = TRUE) #TABLE FOR ANALYSIS
-  names(g[[k]])[c(1,2,3)] <- paste(c("Group.1","Nr.tracks", "Mean.speed"))
-  s[[k]] <- merge(mean.aspeed[[k]],mean.wspeed[[k]],by="Group.1", sort=TRUE)
-  names(s[[k]])[c(1,2,3)] <- paste(c("Timestamp","Mean.aspeed", "Mean.wspeed"))
-  p[[k]] <- merge(mean.heading[[k]],mean.winddir[[k]],by="Group.1", sort=TRUE)
-  r[[k]] <- merge(p[[k]],mean.tr.dir[[k]],by="Group.1",sort=TRUE)
-  names(r[[k]])[c(1,2,3,4)] <- paste(c("Timestamp","Mean.head", "Mean.wdir", "Mean.tr.dir"))
-  a[[k]]<- merge(g[[k]], date[[k]], by="Group.1", sort = TRUE)
-  names(a[[k]])[c(1,2,3,4)]<-paste(c("Timestamp","Nr.tracks", "Mean.speed", "Date"))
-  d[[k]] <- merge(s[[k]],r[[k]],by="Timestamp", sort = TRUE )
-  l [[k]] <- merge(a[[k]],d[[k]],by="Timestamp", sort=TRUE)
-  b[[k]] <- merge(dayP[[k]],month[[k]], by="Timestamp", sort=TRUE)
-  e[[k]] <- merge(light[[k]],season[[k]],by="Timestamp", sort=TRUE)
-  f[[k]] <- merge(b[[k]],l[[k]], by="Timestamp", sort=TRUE)
-  means[[k]] <- merge(f[[k]],e[[k]], by="Timestamp", sort=TRUE)
-}
-rm(list =c("counts","mean.grspeed", "mean.aspeed", "mean.wspeed","mean.heading" ,"mean.tr.dir","mean.winddir","date", 
-           "season","light","dayP","g", "s" ,"p" ,"a" ,"d","l" ,"r","b" ,"e" ,"f" ,"month")) 
 
-#cut(capture.output(print(means),file="means.csv"))#if you want to save the table as csv
-##########################################################
-#############Manipulations with means table###############
 
 #categories according to air speed
 for(k in 1:length(means)){
