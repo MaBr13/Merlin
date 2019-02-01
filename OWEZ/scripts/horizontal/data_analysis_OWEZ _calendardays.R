@@ -12,7 +12,7 @@ Tyear <- listcsv[22:28]
 Fyear <- listcsv[29:31]
 ##including only columns of interest##
 #in one file
-Monthdata <- read.csv("trackplusinfo200707.csv",sep=';')#[,c("trackid", "jaar","maand", "dag", "uur","minuut",
+Monthdata <- read.csv("trackplusinfo200803.csv",sep=';')#[,c("trackid", "jaar","maand", "dag", "uur","minuut",
                                                          #   "season", "light","trackheading","groundspeedkph", 
                                                           #  "airspeedkph", "windspeedkph","winddir")]
 #in multiple files
