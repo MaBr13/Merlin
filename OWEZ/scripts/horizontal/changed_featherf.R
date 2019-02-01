@@ -28,5 +28,6 @@ feather.plot2 <- function (r, theta,xpos,colour, yref = 0, use.arrows = TRUE, co
     arrows(xpos, yref, col=colour, xpos + x, y, length = 0.1, ...)
   else segments(xpos, yref, xpos + x, y, ...)
   par(pin = oldpin)
+
 }
 
