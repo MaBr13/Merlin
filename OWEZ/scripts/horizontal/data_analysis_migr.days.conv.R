@@ -40,21 +40,27 @@ library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 
+library(dplyr)
+
 for(k in 1:length(listFstyear)){
   listFstyear[[k]]$date <- with(listFstyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
   listFstyear[[k]]$timestep <- with(listFstyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFstyear[[k]] <- listFstyear[[k]] %>% arrange(timestep)
 }
 for(k in 1:length(listSyear)){
   listSyear[[k]]$date <- with(listSyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
   listSyear[[k]]$timestep <- with(listSyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listSyear[[k]] <- listSyear[[k]] %>% arrange(timestep)
 }
 for(k in 1:length(listTyear)){
   listTyear[[k]]$date <- with(listTyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
   listTyear[[k]]$timestep <- with(listTyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listTyear[[k]] <- listTyear[[k]] %>% arrange(timestep)
 }
 for(k in 1:length(listFyear)){
   listFyear[[k]]$date <- with(listFyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
   listFyear[[k]]$timestep <- with(listFyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFyear[[k]] <- listFyear[[k]] %>% arrange(timestep)
 }
 #merge together all the months in a year
 y2007 <- do.call("rbind", listFstyear)
@@ -123,7 +129,59 @@ for (k in 1:length(Allyears)){
   Allyears[[k]]$n.month <- month(Allyears[[k]]$change)
   Allyears[[k]]$n.day <- day(Allyears[[k]]$change)
   Allyears[[k]]$n.date <- with(Allyears[[k]],ymd(paste(n.year,n.month,n.day,sep = ' ')))
-  Allyears[[k]]$migr.day <- with(Allyears[[k]],ymd_h(paste(n.year,n.month,n.day,uur,sep = ' '))) 
+  Allyears[[k]]$migr.day <- with(Allyears[[k]],ymd_h(paste(n.year,n.month,n.day,uur,sep = ' ')))
+  Allyears[[k]] <- Allyears[[k]] %>% arrange(timestep)
 }
 
+##########################################################
+#############manipulations with Allyears table###############
+
+#categories according to air speed
+for(k in 1:length(Allyears)){
+  
+  Allyears[[k]]$Aspeed<- cut(Allyears[[k]]$airspeedms,breaks=c(0,12,15,18,27,45), 
+                             labels = c("0-12","12-15","15-18", "18-27", ">27"))
+  
+}
+#categories wind speed
+for(k in 1:length(Allyears)){
+  
+  Allyears[[k]]$Wspeed<- cut(Allyears[[k]]$windspeedms,breaks=c(0,5,10,15,20,25,30,35,40,50), 
+                             labels = c("0-5","5-10","10-15","15-20","20-25","25-30","30-35", "35-40", ">40"))
+  
+}
+
+#mark NAs with a category
+library(dplyr)   # gives mutate_if
+library(forcats) # gives fct_explicit_na
+library(magrittr) # for piping
+
+for(k in 1:length(Allyears)){
+  Allyears[[k]] %<>% mutate(Aspeed = fct_explicit_na(Allyears[[k]]$Aspeed, na_level = "Data n/a"))
+  Allyears[[k]] %<>% mutate(Wspeed = fct_explicit_na(Allyears[[k]]$Wspeed, na_level = "Data n/a"))
+}
+
+#total values
+SpringAll <- list()
+for(k in 1:length(Allyears)){
+  
+  SpringAll[[k]] <- subset(Allyears[[k]], season==2, select=id:Wspeed)
+}
+
+AutumnAll <- list()
+
+for(k in 1:length(Allyears)){
+  
+  AutumnAll[[k]] <- subset(Allyears[[k]], season==4, select=id:Wspeed)
+}
+
+for (k in 1:length(SpringAll)){
+  SpringAll[[k]]$Aspeed <- factor(SpringAll[[k]]$Aspeed, levels = rev(levels(SpringAll[[k]]$Aspeed)))
+  
+}
+
+for (k in 1:length(AutumnAll)){
+  AutumnAll[[k]]$Aspeed <- factor(AutumnAll[[k]]$Aspeed, levels = rev(levels(AutumnAll[[k]]$Aspeed)))
+  
+}
 
