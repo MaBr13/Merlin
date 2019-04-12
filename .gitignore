@@ -32,3 +32,5 @@
 
 *.Rproj.user
 *.mat
+*.dbf
+*.shx
