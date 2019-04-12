@@ -20,6 +20,9 @@
 
 *.pptx
 *.ppt
+*.shp
+*.zip
+*.7z
 
 *.h5
 *.bmp
@@ -27,6 +30,5 @@
 *.db
 *.DS_Store
 
-.Rproj.user
-.7z
-.mat
+*.Rproj.user
+*.mat
