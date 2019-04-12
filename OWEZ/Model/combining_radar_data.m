@@ -6,7 +6,7 @@ clc
 % bird data csv to mat
 year=2008;
 % first load radar data
-Birds=readtable('Birds_sec2008-03-27.csv');
+Birds=readtable('Birds_rh2008-03-27.csv');
 Birds=table2cell(Birds);
 
 

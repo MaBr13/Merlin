@@ -17,19 +17,15 @@ clc
 %% Performance check
 tic
 profile on
+
 %% Loading data and assigning parameters
-year=2008;
+year=2009;
 month=3;
-
-
-%% Loading data and assigning parameters
-
 
 %% Loading data
 % Load basemap
 %load('ShapeOfEurope.mat');
 %load('Europemap.mat');
-
 Europe=shaperead('W_Europe.shp');
 
 % Load weather data
@@ -39,6 +35,7 @@ load (Meteo);
 %Load bird data
 birds='Oneday_925.mat';
 load(birds);
+
 
 
 
@@ -127,7 +124,9 @@ maxLong = max(Mlong(1,:,1))/100;
 minLat = min(Mlat(:,1,1))/100;
 maxLat = max(Mlat(:,1,1))/100;
 
-
+%         % Video
+%         v = VideoWriter(['Day', num2str(DayS), '_winf', num2str(winf), '_as', num2str(as), '.mp4']);
+%         open(v)
 
 
 %% Dynamic calculations %%
@@ -223,13 +222,11 @@ for ii=1:nDays
         end
     end
     
-   
     %% Visualization
     %% Make figure
     if ii==1
         scrsz = get(0,'ScreenSize');
-        f= figure('Position',[30 scrsz(4)/20 scrsz(4) scrsz(3)]);
-        %f= figure('Position',[5 scrsz(4)/40 scrsz(3)/2 scrsz(4)/1.2]);
+        f= figure('Position',[30 scrsz(4)/20 scrsz(3)/1.4 scrsz(4)/1.2]);
         xlim([-14 24]); ylim([48 67])
         xlabel('Longitude')
         ylabel('Latitude')
@@ -238,20 +235,19 @@ for ii=1:nDays
     
     %% Background
     if ii==1    % draw map of Europe
-     %   for i=1:6
-     %       h1=plot(CoastLon(i).X,CoastLat(i).Y,'k');
-     %   end
-           %      for j=1:62    % other shapefile
-           %          h1=plot(ShapeOfEurope(j).X,ShapeOfEurope(j).Y,'k');
-           %      end
-           
-           for j=1:101
-               h1=plot(Europe(j).X,Europe(j).Y,'k');
-           end
+       % for i=1:6
+       %     h1=plot(CoastLon(i).X,CoastLat(i).Y,'k');
+       % end
+       for j=1:101
+           h1=plot(Europe(j).X,Europe(j).Y,'k');
+       end
+        %         for j=1:62    % other shapefile
+        %             h1=plot(ShapeOfEurope(j).X,ShapeOfEurope(j).Y,'k')
+        %         end
         % draw bounding box weather data
         BoundBox = [minLat,minLong; minLat,maxLong; ...
             maxLat,maxLong; maxLat,minLong; minLat,minLong];
-    %    h2=plot(BoundBox(:,2),BoundBox(:,1),'r-');
+       % h2=plot(BoundBox(:,2),BoundBox(:,1),'r-');
     end
     
     if ii~=1
@@ -261,34 +257,41 @@ for ii=1:nDays
     %% Make birds fly
     for j=plotTracks
         
-            h3=plot(Long(j,1:stp(j,ii),ii),Lat(j,1:stp(j,ii),ii),'-','color',rgb('Silver'));      % tracks
+            h3=plot(Long(j,1:stp(j,ii),ii),Lat(j,1:stp(j,ii),ii),'-','color',[0.5 0.5 0.5]);      % tracks
             h3.Color(4) = 0.01;
-            h4=plot(Long(j,1,ii),Lat(j,1,ii),'*','color',rgb('DarkMagenta'),'Markersize', 10);         % beginpoints every day
-            if 1<=stp(j,ii) && stp(j,ii)<=8
-            h5=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DimGray'), 'Markersize', 3);    % endpoints every day
+           
+            h4=plot(Long(j,1,ii),Lat(j,1,ii),'*','color',rgb('DarkMagenta'));         % beginpoints every day
+            if 5<=Airspeed(j,ii) && Airspeed(j,ii)<=10
+            h5=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Fuchsia'), 'Markersize', 3);    % endpoints every day
             h5.Color(4) = 0.01;
              else
-                h5=plot(NaN,NaN,'.','color',rgb('DimGray'), 'Markersize', 3);
+                h5=plot(NaN,NaN,'.','color',rgb('Fuchsia'), 'Markersize', 3);
             end
-            if 9<=stp(j,ii) && stp(j,ii)<=16
-            h6=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('SlateGray'), 'Markersize', 3);    % endpoints every day
+            if 11<=Airspeed(j,ii) && Airspeed(j,ii)<=15
+            h6=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Orchid'), 'Markersize', 3);    % endpoints every day
             h6.Color(4) = 0.01;
              else
-                h6=plot(NaN,NaN,'.','color',rgb('SlateGray'), 'Markersize', 3);
+                h6=plot(NaN,NaN,'.','color',rgb('Orchid'), 'Markersize', 3);
             end
-            if 17<=stp(j,ii) && stp(j,ii)<=24
-            h7=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DarkSlateGray'), 'Markersize', 3);    % endpoints every day
+            if 16<=Airspeed(j,ii) && Airspeed(j,ii)<=20
+            h7=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Violet'), 'Markersize', 3);    % endpoints every day
             h7.Color(4) = 0.01;
             else
-                h7=plot(NaN,NaN,'.','color',rgb('DarkSlateGray'), 'Markersize', 3);
+                h7=plot(NaN,NaN,'.','color',rgb('Violet'), 'Markersize', 3);
             end
-            if 25<=stp(j,ii) && stp(j,ii)<=32
-            h8=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Teal'), 'Markersize', 3);    % endpoints every day
+            if 21<=Airspeed(j,ii) && Airspeed(j,ii)<=25
+            h8=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Plum'), 'Markersize', 3);    % endpoints every day
             h8.Color(4) = 0.01;
              else
-                h8=plot(NaN,NaN,'.','color',rgb('Teal'), 'Markersize',3);
+                h8=plot(NaN,NaN,'.','color',rgb('Plum'), 'Markersize', 3);
             end
-            
+            if 26<=Airspeed(j,ii) && Airspeed(j,ii)<=30
+            h9=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Thistle'), 'Markersize', 3);    % endpoints every day
+            h9.Color(4) = 0.01;
+             else
+                h9=plot(NaN,NaN,'.','color',rgb('Thistle'), 'Markersize', 3);
+            end
+           
         
         %       for l=1:6
         %           AboveLand(j,ii)=inpolygon(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii), CoastLon(l).X, CoastLat(l).Y);
@@ -300,50 +303,46 @@ for ii=1:nDays
         %           h5.Color(4) = 0.01;
         %           end
         %       end
-   
+        
     end
-   % for j=1:62    % other shapefile
-   %     h1=plot(ShapeOfEurope(j).X,ShapeOfEurope(j).Y,'k');
+   % for i=1:6
+   %     h1=plot(CoastLon(i).X,CoastLat(i).Y,'k');
    % end
-    
     for j=1:101
         h1=plot(Europe(j).X,Europe(j).Y,'k');
     end
     
-    
     %% Formatting
-   % if ii==1    % add legend
-   %     [leg,icons]=legend([ h5, h6, h7, h8,h4],{'0-4','4-8','8-12','12-16','Radar'},'Location','northwest','Fontsize',11);
-   %     set(leg, 'Position', [0.1841 0.7657 0.1146 0.1160]);
-   %     hlt = text(...
-   %         'Parent', leg.DecorationContainer, ...
-   %         'String', 'Time flying (hours)', ...
-   %         'HorizontalAlignment', 'center', ...
-   %         'VerticalAlignment', 'bottom', ...
-   %         'Position', [0.5, 1.05, 0], ...
-   %         'Units', 'normalized','FontSize',12,'Fontweight','bold');
+     if ii==1    % add legend
+        [leg,icons]=legend([ h5, h6, h7, h8,h9,h4],{'5-10','10-15','15-20','20-25','25-30','Radar'},'Location','northwest','Fontsize',11);
+        set(leg, 'Position', [0.1841 0.7657 0.1146 0.1160]);
+        hlt = text(...
+            'Parent', leg.DecorationContainer, ...
+            'String', 'Airspeeds (m/s)', ...
+            'HorizontalAlignment', 'center', ...
+            'VerticalAlignment', 'bottom', ...
+            'Position', [0.5, 1.05, 0], ...
+            'Units', 'normalized','FontSize',12,'Fontweight','bold');
         
         
-   %     icons = findobj(icons, 'type', 'line'); %// objects of legend of type line
-   %     set(icons, 'Markersize',20); %// set marker size as desired
-   % end
+        icons = findobj(icons, 'type', 'line'); %// objects of legend of type line
+        set(icons, 'Markersize',20); %// set marker size as desired
+        
+    end
     
-   % title([TT, ', AS=',num2str(mean(as)),' EndoDir=',num2str(mean(Headings)),' Number of birds=',num2str(sum(nTracks))
-   %     ],'FontSize',14)
-   % drawnow
+    title([TT, ', AS=',num2str(mean(as)),' EndoDir=',num2str(mean(Headings)),' Number of birds=',num2str(sum(nTracks))
+        ])
+    drawnow
     
-    
-    
-    
-    
+    %     %% Video
+    %     for k=1:15
+    %         writeVideo(v,getframe(gcf))
+    %     end
+    %
 end %for ii= nDays
-%% Video
-   % v = VideoWriter(['stp', num2str(DayS), '_winf', num2str(winf), '_as', num2str(as), '.mp4']);
-   %open(v)%% Video
-   % for k=stp(j)
-   %     writeVideo(v,getframe(gcf))
-   % end
-    
+
+
+
 % close(v)
 %% Analysis
 SummedDist(1,1:nTracks)=0; %initialization
@@ -381,11 +380,10 @@ end
 
 %% Saving
 % Figure
-Filename=['M' TT '_' num2str(nanmean(as)) '.png'];
+Filename=['MAS' TT '_' num2str(nanmean(as)) '.png'];
 print ('-dpng', '-r100', Filename)
 
 % Analysis
-%save(['RadarData',num2str(year),'_day',num2str(DayS(1,1)+ii-1),'_winf',num2str(winf),'_as',num2str(nanmean(as))]);
 %save(['AllResults',num2str(year)]);
 
 %% Performance check

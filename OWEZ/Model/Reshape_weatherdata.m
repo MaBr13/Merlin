@@ -4,10 +4,12 @@ close all
 clc
 
 % weatherdata csv to mat
-year=2008;
 % first load .csv 
-MeteoData2008=readtable('march_2008.csv');
+MeteoData2008=readtable('march_2010.csv');
 MeteoData2008=table2cell(MeteoData2008);
+
+year=year(MeteoData2008(1,1));
+month=month(MeteoData2008(1,1));
 
 lat=length(unique(cell2mat(MeteoData2008(:,2))));
 long=length(unique(cell2mat(MeteoData2008(:,3))));
@@ -21,12 +23,10 @@ Mu = str2double(reshape(MeteoData2008(:,4),long,lat,[]));
 Mv = str2double(reshape(MeteoData2008(:,5),long,lat,[]));
 
 
-save('MeteoMatrix2008_925_reshape.mat', 'MTime', 'Mlong','Mlat', 'Mu', 'Mv')
-
 MTime = rot90(MTime);
 Mlat = rot90(Mlat);
 Mlong = rot90(Mlong);
 Mu = rot90(Mu);
 Mv = rot90(Mv);
 
-save('MeteoMatrix2008_925.mat', 'MTime', 'Mlong','Mlat', 'Mu', 'Mv')
+save(['MeteoMatrix',num2str(year),'_',num2str(month), '_925'], 'MTime', 'Mlong','Mlat', 'Mu', 'Mv')

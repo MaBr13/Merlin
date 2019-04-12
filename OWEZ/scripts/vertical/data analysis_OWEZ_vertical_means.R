@@ -24,10 +24,12 @@ Firstyear <- subset(Firstyear,Month>2, select=Track_ID:light)
 Firstyear <- subset(Firstyear,Month<6, select=Track_ID:light)
 Firstyear <- subset(Firstyear, Day==29, select=Track_ID:light)
 
-Sys.setenv(TZ='GMT')
 library(lubridate)
-Firstyear$date <- with(Firstyear, ymd(paste(Year,Month,Day, sep=' ')))
-Firstyear$timestep <- with(Firstyear, ymd_h(paste(Year,Month,Day, Hour, sep= ' ')))
+Sys.setenv(TZ="UTC")
+Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
+
+dataset$date <- with(dataset, ymd(paste(Year,Month,Day, sep=' ')))
+dataset$timestep <- with(dataset, ymd_h(paste(Year,Month,Day, Hour, sep= ' ')))
 
 #aggregating by timestamp and according to different function that you specify in brackets (the list of functions
 #to be used can be find in a help page) and merging the data frames
