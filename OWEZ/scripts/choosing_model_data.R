@@ -1,3 +1,7 @@
+####SCRIPT FOR PICKING OUT THE NIGHTS WITH THE MOST INTENSE MIGRATION BASED ON 95 PERCENTILE
+
+
+
 library(foreign)
 dataset<- read.spss( "C:\\Users\\mbradar\\Documents\\Merlin\\OWEZ\\data\\vertical\\OWEZ_X_tracks_2007-2010.sav", 
                      to.data.frame = T)
@@ -64,6 +68,10 @@ for (k in 1:length(Join)){
 #dataset that contains numbers of birds between sunset and sunrise as recorded by the vertical radar
 Allbirds <- do.call("rbind",Birds)
 #calculate number of tracks per date
+a <- nights$Date
+check <- Allbirds[which(Allbirds$n.date %in% a),]
+fsv <- check[,c(1:2,10,22:23)]
+write.csv(fsv, file="intense_migration_v.csv",row.names = FALSE)
 library(lubridate)
 
 
@@ -80,8 +88,8 @@ ggplot(counts, aes(Date,Nr.tracks)) +
   annotate("rect",xmin=as.Date("2009-02-15"),xmax=as.Date("2009-05-31"),ymin=0,ymax=Inf,fill="forestgreen",alpha=0.4)+
   annotate("rect",xmin=as.Date("2009-08-01"),xmax=as.Date("2009-11-30"),ymin=0,ymax=Inf,fill="coral",alpha=0.4)+
   annotate("rect",xmin=as.Date("2010-02-15"),xmax=as.Date("2010-05-31"),ymin=0,ymax=Inf,fill="forestgreen",alpha=0.4)+
-  geom_bar(stat="identity",fill="black") +
-  geom_hline(yintercept=2000, color = "red")+
+  geom_col(fill="black") +
+  geom_hline(yintercept=quantile(counts$Nr.tracks,c(.95),type=8), color = "red")+
   #ggtitle("Number of tracks per day 2007-2010") +
   coord_cartesian(xlim=c(as.Date("2007-06-01"), as.Date("2010-06-01")))+
   #geom_vline(xintercept = as.numeric(means$Date[c(82,157,227,311,396,470,553,638,706,785,872,959)]),linetype=2,colour=c("black"),size=1.5)+
@@ -89,5 +97,30 @@ ggplot(counts, aes(Date,Nr.tracks)) +
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
         axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
         axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  xlab("Year") + ylab("Number of tracks per day") + ylim(0,20000) +
+  xlab("Year") + ylab("Number of tracks per day") + ylim(0,20400) +
   scale_x_date(date_breaks="years", date_labels="%Y", limits=c(as.Date("2007-06-01"), as.Date("2010-06-01")))
+
+
+nights1=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.95),type=8))
+nights2=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.75),type=8))
+nights3=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.5),type=8))
+nights4=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.25),type=8))
+nights5=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.0),type=8))
+nights <- nights[["Date"]]
+
+numbers <- c(nrow(nights1),nrow(nights2),nrow(nights3),nrow(nights4),nrow(nights5))
+quantiles <- c(.95,.75,.50,.25,.0)
+
+qnts <- as.data.frame(cbind(numbers,quantiles))
+
+ggplot(qnts, aes(quantiles,numbers)) +
+  geom_col() +
+  #geom_vline(xintercept = as.numeric(means$Date[c(82,157,227,311,396,470,553,638,706,785,872,959)]),linetype=2,colour=c("black"),size=1.5)+
+  theme(axis.title.y = element_text(size=14), legend.text=element_text(size=12), 
+        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
+        axis.text.y=element_text(size=11), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
+        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
+  xlab("Quantiles") + ylab("Number of nights") + 
+  scale_y_continuous(breaks=seq(0,613,20)) + 
+  scale_x_continuous(breaks=c(.0,.25,.5,.75,.95),labels=c("0%","25%","50%","75%","95%"))
+
