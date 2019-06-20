@@ -3,8 +3,6 @@ library(ggplot2)
 library(gridExtra)
 library(ggpubr)
 
-register_google(key = "AIzaSyC-bw1FEcHmDesL-zAPgW9RaWwolld2gRw")
-
 #creating map
 
 NSea <- get_map(location = c(lon=5.5, lat=54.5110 ), 
