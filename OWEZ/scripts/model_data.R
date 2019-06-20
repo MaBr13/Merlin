@@ -134,22 +134,30 @@ for(k in 1:length(Allyears_)){
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 
-Oct1a <- subset(Allyears_[[1]], timestep>="2007-10-10 16:00:00" & timestep<="2007-10-11 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct2a <- subset(Allyears_[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC" , select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct3a <- subset(Allyears_[[1]], timestep>="2007-10-18 16:00:00" & timestep<="2007-10-19 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct4a<- subset(Allyears_[[1]], timestep>="2007-10-19 16:00:00" & timestep<="2007-10-20 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct5a <- subset(Allyears_[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct6a <- subset(Allyears_[[2]], timestep>="2008-10-28 16:00:00" & timestep<="2008-10-29 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct7a <- subset(Allyears_[[2]], timestep>="2008-10-29 16:00:00" & timestep<="2008-10-30 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct8a <- subset(Allyears_[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar1a <- subset(Allyears_[[2]], timestep>="2008-03-27 16:00:00 UTC" & timestep<="2008-03-28 16:00:00 UTC", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar2a <- subset(Allyears_[[3]], timestep>="2009-03-13 16:00:00" & timestep<="2009-03-14 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar3a <- subset(Allyears_[[3]], timestep>="2009-03-16 16:00:00" & timestep<="2009-03-17 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar4a <- subset(Allyears_[[4]], timestep>="2010-03-16 16:00:00 UTC" & timestep<="2010-03-17 16:00:00 UTC", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar5a <- subset(Allyears_[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00" , select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar6a<- subset(Allyears_[[4]], timestep>="2010-03-22 16:00:00" & timestep<="2010-03-23 16:00:00", select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Sep1 <- subset(Allyears_[[2]], timestep>="2008-09-29 16:00:00" & timestep<="2008-09-30 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct1 <- subset(Allyears_[[1]], timestep>="2007-10-02 16:00:00" & timestep<="2007-10-03 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct2 <- subset(Allyears_[[1]], timestep>="2007-10-06 16:00:00" & timestep<="2007-10-07 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct3 <- subset(Allyears_[[1]], timestep>="2007-10-10 16:00:00" & timestep<="2007-10-11 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct4 <- subset(Allyears_[[1]], timestep>="2007-10-12 16:00:00" & timestep<="2007-10-13 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct5 <- subset(Allyears_[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir) )
+Oct6 <- subset(Allyears_[[1]], timestep>="2007-10-17 16:00:00" & timestep<="2007-10-18 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct7 <- subset(Allyears_[[1]], timestep>="2007-10-18 16:00:00" & timestep<="2007-10-19 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct8<- subset(Allyears_[[1]], timestep>="2007-10-19 16:00:00" & timestep<="2007-10-20 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct9 <- subset(Allyears_[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct10 <- subset(Allyears_[[1]], timestep>="2007-10-21 16:00:00" & timestep<="2007-10-22 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct11 <- subset(Allyears_[[1]], timestep>="2007-10-22 16:00:00" & timestep<="2007-10-23 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct12<- subset(Allyears_[[1]], timestep>="2007-10-23 16:00:00" & timestep<="2007-10-24 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct13 <- subset(Allyears_[[2]], timestep>="2008-10-06 16:00:00" & timestep<="2008-10-07 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct14 <- subset(Allyears_[[2]], timestep>="2008-10-17 16:00:00" & timestep<="2008-10-18 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct15 <- subset(Allyears_[[2]], timestep>="2008-10-28 16:00:00" & timestep<="2008-10-29 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct16 <- subset(Allyears_[[2]], timestep>="2008-10-29 16:00:00" & timestep<="2008-10-30 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct17 <- subset(Allyears_[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Oct18 <- subset(Allyears_[[2]], timestep>="2008-10-31 16:00:00" & timestep<="2008-11-01 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Mar1 <- subset(Allyears_[[2]], timestep>="2008-03-27 16:00:00 UTC" & timestep<="2008-03-28 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Mar2 <- subset(Allyears_[[3]], timestep>="2009-03-16 16:00:00" & timestep<="2009-03-17 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+Mar3 <- subset(Allyears_[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
 
-Alldays <- list(Oct1a,Oct2a,Oct3a,Oct4a,Oct5a,Oct6a,Oct7a,Oct8a,Mar1a,Mar2a,Mar3a,Mar4a,Mar5a,Mar6a)
+Alldays <- list(Sep1,Oct1,Oct2,Oct3,Oct4,Oct5,Oct6,Oct7,Oct8,Oct9,Oct10,Oct11,Oct12,Oct13,Oct14,Oct15,Oct16,Oct17,Oct18,Mar1,Mar2,Mar3)
 
 library(tidyverse)
 
@@ -176,7 +184,7 @@ for (k in 1:length(Alldays)){
  sun[[k]]$sunrise <- sun[[k]]$sunrise-3600
 }
 
-Join <- lapply(1:14, function(n){
+Join <- lapply(1:22, function(n){
   Alldays[[n]] %>% left_join(sun[[n]], by=c("date"))
 })
 
@@ -186,15 +194,18 @@ Birds <- list()
 #filtering just on timestamp and airspeed
 for (k in 1:length(Join)){
   if (nrow(sun[[k]])==1){
-    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5]-86400 & timestep.x<=sun[[k]][1,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x,b.heading,airspeedms))
+    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5]-86400 & timestep.x<=sun[[k]][1,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x:new.winddir))
   }else {
-    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5] & timestep.x<=sun[[k]][2,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x,b.heading,airspeedms))
+    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5] & timestep.x<=sun[[k]][2,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x:new.winddir))
   }
   
 }
 
+fsv <- do.call(rbind.data.frame, Birds)
+write.csv(fsv,file = "intense_migration_h.csv", row.names = FALSE)
 
-
+###################################################################################
+########SKIP THIS PART IF YOU WANT ALL THE DIRECTIONS INCLUDED#####################
 #filtering on timestamp, airspeed and directions that majority of birds is using
 #first divide list in autumn and spring, because preferred directions are not the same
 
@@ -262,11 +273,12 @@ ggplot(wind_a, aes(x=winddir)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
+#saving the data
 setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/radar_data")
 
 library(lubridate)
 for (k in 1:length(Birds)){
   s <- as.data.frame(Birds[[k]])
   datetime <- paste0(date(s[1,1]))
-  write.csv(Birds[[k]], file = paste0("Birds_rh",datetime,".csv"))
+  write.csv(Birds[[k]], file = paste0("Birds_f",datetime,".csv"))
 }
