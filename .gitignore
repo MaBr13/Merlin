@@ -34,3 +34,5 @@
 *.mat
 *.dbf
 *.shx
+*.Rproj.user
+*.fig
