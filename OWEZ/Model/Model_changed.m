@@ -18,8 +18,10 @@ clc
 tic
 profile on
 %% Loading data and assigning parameters
-year=2008;
+year=2010;
 month=3;
+pl=1000;
+
 
 
 %% Loading data and assigning parameters
@@ -33,11 +35,11 @@ month=3;
 Europe=shaperead('W_Europe.shp');
 
 % Load weather data
-Meteo=['MeteoMatrix',num2str(year),'_',num2str(month), '_925'];
+Meteo=['MeteoMatrix',num2str(year),'_',num2str(month),'_', num2str(pl)];
 load (Meteo);
 
 %Load bird data
-birds='Oneday_925.mat';
+birds='Oneday_925oct.mat';
 load(birds);
 
 
@@ -50,7 +52,7 @@ dt=0.5;         % timestep in hours
 as=Airspeed;          % airspeed [m s-1]
 winf=1;       % wind influence multiplier
 DayS=Day;   %Days(1,:);       % startday DayS=birds
-DispAmount=floor(nTracks/2);  % amount of individuals to visualize per group
+DispAmount= floor(nTracks/2);  % amount of individuals to visualize per group
 % note: nTrack/nDays should be more than DispAmount
 
 
@@ -85,8 +87,10 @@ sunsetT(1:nTracks,1:nDays)=NaN;
 hr1(1:nTracks,1:nDays)=NaN;
 hr2(1:nTracks,1:nDays)=NaN;
 stp(1:nTracks,1:nDays)=NaN;
+fLat(1:nTracks,1:nDays)=NaN;
+fLong(1:nTracks,1:nDays)=NaN;
 
-%HD(1:nTracks,1:nSteps,1:nDays)=30;
+%HD(1:nTracks,1:nSteps,1:nDays)=30
 
 
 Distu_unit(1:nTracks,1:nSteps,1:nDays)=NaN;
@@ -260,9 +264,10 @@ for ii=1:nDays
     end
     %% Make birds fly
     for j=plotTracks
+           
         
-            h3=plot(Long(j,1:stp(j,ii),ii),Lat(j,1:stp(j,ii),ii),'-','color',rgb('Silver'));      % tracks
-            h3.Color(4) = 0.01;
+            %h3=plot(Long(j,1:stp(j,ii),ii),Lat(j,1:stp(j,ii),ii),'-','color',rgb('Silver'));      % tracks
+            %h3.Color(4) = 0.01;
             h4=plot(Long(j,1,ii),Lat(j,1,ii),'*','color',rgb('DarkMagenta'),'Markersize', 10);         % beginpoints every day
             if 1<=stp(j,ii) && stp(j,ii)<=8
             h5=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DimGray'), 'Markersize', 3);    % endpoints every day
@@ -271,22 +276,22 @@ for ii=1:nDays
                 h5=plot(NaN,NaN,'.','color',rgb('DimGray'), 'Markersize', 3);
             end
             if 9<=stp(j,ii) && stp(j,ii)<=16
-            h6=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('SlateGray'), 'Markersize', 3);    % endpoints every day
+            h6=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DimGray'), 'Markersize', 3);    % endpoints every day
             h6.Color(4) = 0.01;
              else
-                h6=plot(NaN,NaN,'.','color',rgb('SlateGray'), 'Markersize', 3);
+                h6=plot(NaN,NaN,'.','color',rgb('DimGray'), 'Markersize', 3);
             end
             if 17<=stp(j,ii) && stp(j,ii)<=24
-            h7=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DarkSlateGray'), 'Markersize', 3);    % endpoints every day
+            h7=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DimGray'), 'Markersize', 3);    % endpoints every day
             h7.Color(4) = 0.01;
             else
-                h7=plot(NaN,NaN,'.','color',rgb('DarkSlateGray'), 'Markersize', 3);
+                h7=plot(NaN,NaN,'.','color',rgb('DimGray'), 'Markersize', 3);
             end
             if 25<=stp(j,ii) && stp(j,ii)<=32
-            h8=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('Teal'), 'Markersize', 3);    % endpoints every day
+            h8=plot(Long(j,stp(j,ii),ii),Lat(j,stp(j,ii),ii),'.','color',rgb('DimGray'), 'Markersize', 3);    % endpoints every day
             h8.Color(4) = 0.01;
              else
-                h8=plot(NaN,NaN,'.','color',rgb('Teal'), 'Markersize',3);
+                h8=plot(NaN,NaN,'.','color',rgb('DimGray'), 'Markersize',3);
             end
             
         
@@ -332,7 +337,8 @@ for ii=1:nDays
    %     ],'FontSize',14)
    % drawnow
     
-    
+   
+  
     
     
     
@@ -381,11 +387,25 @@ end
 
 %% Saving
 % Figure
-Filename=['M' TT '_' num2str(nanmean(as)) '.png'];
+Filename=['M' TT '_' num2str(nanmean(as)) '_'  num2str(pl) '.png'];
 print ('-dpng', '-r100', Filename)
 
+Time_new=Time-1+datenum([num2str(year),'-01-01 00:00:00']);
+TTime=datetime(Time_new,'ConvertFrom','datenum','Format', 'yyyy-MM-dd HH:mm:ss');
+
+
+    for iii=1:nTracks
+     
+      fLat(iii,ii)=Lat(iii,stp(iii,ii),ii);
+      fLong(iii,ii)=Long(iii,stp(iii,ii),ii);
+    end
+ 
+% time=array2table(fTime,'VariableNames',{'Time'});
+ new=array2table([fLong,fLat],'VariableNames',{'Long','Lat'});
+ writetable(new,['Departures_',TT,'_',num2str(pl),'.csv']);
+
 % Analysis
-%save(['RadarData',num2str(year),'_day',num2str(DayS(1,1)+ii-1),'_winf',num2str(winf),'_as',num2str(nanmean(as))]);
+%save(['RadarData',num2str(year),'_day',num2str(DayS(1,1)+ii-1),'_winf',num2str(winf),'_as',num2str(nanmean(as)),'_',num2str(pl)]);
 %save(['AllResults',num2str(year)]);
 
 %% Performance check
