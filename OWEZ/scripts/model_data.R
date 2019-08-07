@@ -65,10 +65,10 @@ rm(list = c("listFstyear","listFyear","listSyear",
 
 path <- setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/data/horizontal/ecmwf_weather")
 
-Fstweather <- read.csv('Winds_radar2_2007.csv',sep=',')
-Sweather <- read.csv('Winds_radar2_2008.csv',sep = ',')
-Tweather <- read.csv('Winds_radar2_2009.csv',sep = ',')
-Fweather <- read.csv('Winds_radar2_2010.csv',sep = ',')
+Fstweather <- read.csv('Winds_radar_2007_pl1000_3h.csv',sep=',')
+Sweather <- read.csv('Winds_radar_2008_pl1000_3h.csv',sep = ',')
+Tweather <- read.csv('Winds_radar_2009_pl1000_3h.csv',sep = ',')
+Fweather <- read.csv('Winds_radar_2010_pl1000_3h.csv',sep = ',')
 
 
 
@@ -130,34 +130,81 @@ for(k in 1:length(Allyears_)){
   Allyears_[[k]]$b.heading <-  ifelse(Allyears_[[k]]$r.heading<0, 360+Allyears_[[k]]$r.heading, Allyears_[[k]]$r.heading)
 }
 
+#change calendar days into migration days
+for (k in 1:length(Allyears_)){
+  s <- Allyears_[[k]]
+  date <- paste0(format(s[1,15], format="%Y-%m-%d"))
+  time <- "16:00:00"
+  start.date <- ymd(date) + hms(time)
+  breaks = seq(start.date - 366*3600*24, start.date + 366*3600*24, "1 days")
+  Allyears_[[k]]$change = cut(Allyears_[[k]]$timestep, breaks=breaks)
+  Allyears_[[k]]$n.year <- year(Allyears_[[k]]$change)
+  Allyears_[[k]]$n.month <- month(Allyears_[[k]]$change)
+  Allyears_[[k]]$n.day <- day(Allyears_[[k]]$change)
+  Allyears_[[k]]$n.date <- with(Allyears_[[k]],ymd(paste(n.year,n.month,n.day,sep = ' ')))
+  Allyears_[[k]]$migr.day <- with(Allyears_[[k]],ymd_h(paste(n.year,n.month,n.day,uur,sep = ' ')))
+  Allyears_[[k]] <- Allyears_[[k]] %>% arrange(timestep)
+}
 
-Sys.setenv(TZ="UTC")
-Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 
-Sep1 <- subset(Allyears_[[2]], timestep>="2008-09-29 16:00:00" & timestep<="2008-09-30 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct1 <- subset(Allyears_[[1]], timestep>="2007-10-02 16:00:00" & timestep<="2007-10-03 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct2 <- subset(Allyears_[[1]], timestep>="2007-10-06 16:00:00" & timestep<="2007-10-07 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct3 <- subset(Allyears_[[1]], timestep>="2007-10-10 16:00:00" & timestep<="2007-10-11 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct4 <- subset(Allyears_[[1]], timestep>="2007-10-12 16:00:00" & timestep<="2007-10-13 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct5 <- subset(Allyears_[[1]], timestep>="2007-10-13 16:00:00 UTC" & timestep<="2007-10-14 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir) )
-Oct6 <- subset(Allyears_[[1]], timestep>="2007-10-17 16:00:00" & timestep<="2007-10-18 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct7 <- subset(Allyears_[[1]], timestep>="2007-10-18 16:00:00" & timestep<="2007-10-19 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct8<- subset(Allyears_[[1]], timestep>="2007-10-19 16:00:00" & timestep<="2007-10-20 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct9 <- subset(Allyears_[[1]], timestep>="2007-10-20 16:00:00 UTC" & timestep<="2007-10-21 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct10 <- subset(Allyears_[[1]], timestep>="2007-10-21 16:00:00" & timestep<="2007-10-22 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct11 <- subset(Allyears_[[1]], timestep>="2007-10-22 16:00:00" & timestep<="2007-10-23 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct12<- subset(Allyears_[[1]], timestep>="2007-10-23 16:00:00" & timestep<="2007-10-24 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct13 <- subset(Allyears_[[2]], timestep>="2008-10-06 16:00:00" & timestep<="2008-10-07 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct14 <- subset(Allyears_[[2]], timestep>="2008-10-17 16:00:00" & timestep<="2008-10-18 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct15 <- subset(Allyears_[[2]], timestep>="2008-10-28 16:00:00" & timestep<="2008-10-29 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct16 <- subset(Allyears_[[2]], timestep>="2008-10-29 16:00:00" & timestep<="2008-10-30 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct17 <- subset(Allyears_[[2]], timestep>="2008-10-30 16:00:00 UTC" & timestep<="2008-10-31 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Oct18 <- subset(Allyears_[[2]], timestep>="2008-10-31 16:00:00" & timestep<="2008-11-01 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar1 <- subset(Allyears_[[2]], timestep>="2008-03-27 16:00:00 UTC" & timestep<="2008-03-28 16:00:00 UTC",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar2 <- subset(Allyears_[[3]], timestep>="2009-03-16 16:00:00" & timestep<="2009-03-17 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
-Mar3 <- subset(Allyears_[[4]], timestep>="2010-03-21 16:00:00" & timestep<="2010-03-22 16:00:00",select = c(timestep,trackheading,windspeedms,b.heading,airspeedms,date,new.winddir))
+#filter based on light(to get only data between sunrise and sunset) and airspeed
+#select only columns needed for further analysis
+AllBirds <- list()
 
-Alldays <- list(Sep1,Oct1,Oct2,Oct3,Oct4,Oct5,Oct6,Oct7,Oct8,Oct9,Oct10,Oct11,Oct12,Oct13,Oct14,Oct15,Oct16,Oct17,Oct18,Mar1,Mar2,Mar3)
+for (k in 1:length(Allyears_)){
+  AllBirds[[k]]<- subset(Allyears_[[k]],light==0 & airspeedms>=5 & airspeedms<=30,
+                         select=c(date,timestep,trackheading, groundspeedms, n.date,n.year,n.month,n.day,
+                                                  windspeedms,airspeedms,new.winddir,b.heading))
+}
+
+#divide Allbirds table in Spring and Autumn seasons
+#SPRING
+spr <- list()
+for(k in 1:length(AllBirds)){
+  spr[[k]] <- subset(AllBirds[[k]],n.month>=2 & n.month<=5)
+ spr[[k]] <- subset(spr[[k]],n.month>=2 & n.day>=15)
+}
+
+Spring <- do.call("rbind", spr)
+
+#AUTUMN
+aut <- list()
+for(k in 1:length(AllBirds)){
+  aut[[k]] <- subset(AllBirds[[k]],n.month>=8 & n.month<12)
+}
+Autumn <- do.call("rbind", aut)
+
+#write out csvs for further analysis
+setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/statistical_analysis/data")
+write.csv(Spring, file = "Spring.csv")
+write.csv(Autumn,file="Autumn.csv")
+
+rm(list=c("spr","Spring","s","aut","Autumn"))
+
+#load the csv files that contains dates of the nights that should be analysed and choose only those nights from the
+#horizontal data
+setwd('C:/Users/mbradar/Documents/Merlin/OWEZ/Model')
+nights <- read.csv('nights.csv')
+dates <- as.Date(nights$x)
+
+
+AllBirds_1 <- do.call("rbind",AllBirds) 
+analysis <- AllBirds_1[which(AllBirds_1$n.date %in% dates),]
+
+#divide nights of intense migration per season
+Spring_int <- subset(analysis,n.month>=2 & n.month<=5)
+Autumn_int <- subset(analysis,n.month>=8 & n.month<12)
+
+setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/statistical_analysis/data")
+write.csv(Spring_int, file = "Spring_int.csv")
+write.csv(Autumn_int,file="Autumn_int.csv")
+
+rm(list=c("AllBirds_1","analysis","Spring_int","Autumn_int"))
+#divide intense nights and filer based on sunrise and sunset times to use them in running a simulation
+Allyears_1 <- do.call("rbind",Allyears_) 
+analysis <- Allyears_1[which(Allyears_1$n.date %in% dates),]
+
+Alldays <- split(analysis,analysis$n.date)
 
 library(tidyverse)
 
@@ -190,19 +237,32 @@ Join <- lapply(1:22, function(n){
 
 
 Birds <- list()
-
-#filtering just on timestamp and airspeed
 for (k in 1:length(Join)){
   if (nrow(sun[[k]])==1){
-    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5]-86400 & timestep.x<=sun[[k]][1,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x:new.winddir))
+    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5]-86400 & timestep.x<=sun[[k]][1,4] 
+                            & airspeedms>=5 & airspeedms<=30,select=c(date,timestep.x,trackheading, groundspeedms, n.year,n.month,n.day,
+                                                                      windspeedms,airspeedms,new.winddir,b.heading))
   }else {
-    Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5] & timestep.x<=sun[[k]][2,4] & airspeedms>=5 & airspeedms<=30,select=c(timestep.x:new.winddir))
+   Birds[[k]] <- subset(Join[[k]],timestep.x>=sun[[k]][1,5] & timestep.x<=sun[[k]][2,4] 
+                            & airspeedms>=5 & airspeedms<=30,select=c(date,timestep.x,trackheading,
+                                                                      groundspeedms, n.year,n.month,n.day,
+                                                                      windspeedms,airspeedms,new.winddir,b.heading))
   }
   
 }
 
+#saving the data
+setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/radar_data")
+
+library(lubridate)
+for (k in 1:length(Birds)){
+  s <- as.data.frame(Birds[[k]])
+  datetime <- paste0(date(s[1,1]))
+  write.csv(Birds[[k]], file = paste0("Birds_hr",datetime,".csv"))
+}
+
 fsv <- do.call(rbind.data.frame, Birds)
-write.csv(fsv,file = "intense_migration_h.csv", row.names = FALSE)
+write.csv(fsv,file = "intense_migration_hr.csv", row.names = FALSE)
 
 ###################################################################################
 ########SKIP THIS PART IF YOU WANT ALL THE DIRECTIONS INCLUDED#####################
@@ -230,7 +290,7 @@ for (k in 1:length(Birds)){
   Birds[[k]]$Aspeed <- factor(Birds[[k]]$Aspeed, levels = rev(levels(Birds[[k]]$Aspeed)))
   
 }
-
+#visualizations
 ggplot(Birds[[9]], aes(x=b.heading)) + 
   geom_histogram(aes(fill=Birds[[9]]$Aspeed, colour=Birds[[9]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
   scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
@@ -273,12 +333,4 @@ ggplot(wind_a, aes(x=winddir)) +
   coord_polar(start = 0) +
   scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
-#saving the data
-setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/radar_data")
 
-library(lubridate)
-for (k in 1:length(Birds)){
-  s <- as.data.frame(Birds[[k]])
-  datetime <- paste0(date(s[1,1]))
-  write.csv(Birds[[k]], file = paste0("Birds_f",datetime,".csv"))
-}
