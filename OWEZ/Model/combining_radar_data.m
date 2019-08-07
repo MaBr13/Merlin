@@ -4,15 +4,16 @@ close all
 clc
 
 % bird data csv to mat
-year=2010;
 % first load radar data
-Birds=readtable('Birds_f2010-03-21.csv');
+Birds=readtable('Birds_hr2010-03-26.csv');
+date=table2array(Birds(1,2));
+Dates = datetime(table2array(Birds(:,3)));
+year=year(table2array(Birds(1,2)));
 Birds=table2cell(Birds);
 
 
-Dates = datetime(Birds(:,2));
 Day = (datenum([num2str(year),'-01-01 00:00:00'])-datenum([num2str(year),'-01-01 00:00:00']))+(datenum(Dates)-datenum([num2str(year),'-01-01 00:00:00'])+1);
-Headings=cell2mat(Birds(:,3));
-Airspeed=cell2mat(Birds(:,4));
+Headings=cell2mat(Birds(:,12));
+Airspeed=cell2mat(Birds(:,10));
 
-save('Oneday_925oct.mat', 'Day', 'Headings','Airspeed')
+save(['One_day_' datestr(date,'yyyymmdd'),'.mat'], 'Day', 'Headings','Airspeed')
