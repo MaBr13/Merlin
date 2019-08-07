@@ -38,3 +38,6 @@
 *.fig
 *.gif
 *.mp4
+.Rproj.user
+*.mat
+*.mat
