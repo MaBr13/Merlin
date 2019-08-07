@@ -1,7 +1,5 @@
 ####SCRIPT FOR PICKING OUT THE NIGHTS WITH THE MOST INTENSE MIGRATION BASED ON 95 PERCENTILE
 
-
-
 library(foreign)
 dataset<- read.spss( "C:\\Users\\mbradar\\Documents\\Merlin\\OWEZ\\data\\vertical\\OWEZ_X_tracks_2007-2010.sav", 
                      to.data.frame = T)
@@ -37,7 +35,7 @@ Join <- list()
 Join <- lapply(1:4, function(n){
   Allyears[[n]] %>% left_join(sun[[n]], by=c("date"))
 })
-##turn days into migration days
+##turn days into migration days 
 for (k in 1:length(Join)){
   s <- Join[[k]]
   date <- paste0(format(s[1,11], format="%Y-%m-%d"))
@@ -53,7 +51,8 @@ for (k in 1:length(Join)){
   Join[[k]] <- Join[[k]] %>% arrange(timestep.x)
 }
 
-
+#if you want to include only summer and autumn seasons in your graph
+#SKIP IF YOU WANT ALL DATA TO SHOW IN YOUR GRAPH!!!
 for(k in 1:length(Join)){
   Join[[k]] <- subset(Join[[k]],Month>=2 & Month<=5 | Month>=8 & Month<12)
 }
@@ -61,24 +60,26 @@ for(k in 1:length(Join)){
 Birds <- list()
 
 for (k in 1:length(Join)){
-    Birds[[k]] <- subset(Join[[k]],light==0)
-}
-  
-
+    Birds[[k]]<- subset(Join[[k]],light==0)
+  }
+    
 #dataset that contains numbers of birds between sunset and sunrise as recorded by the vertical radar
 Allbirds <- do.call("rbind",Birds)
 #calculate number of tracks per date
-a <- nights$Date
-check <- Allbirds[which(Allbirds$n.date %in% a),]
-fsv <- check[,c(1:2,10,22:23)]
-write.csv(fsv, file="intense_migration_v.csv",row.names = FALSE)
-library(lubridate)
-
-
 library(xts)
 counts <- aggregate(Allbirds$Track_ID, by = list(Allbirds$n.date), FUN="length")
 colnames(counts)[colnames(counts)==c("Group.1","x")] <- c("Date","Nr.tracks")
 
+#divide in spring and summer for quantile calculation for different seasons
+spring <- subset(Allbirds, Month>=2 & Month<=5)
+autumn <- subset(Allbirds, Month>=8 & Month<=11)
+#calculate number of tracks per date per season
+countsS <- aggregate(spring$Track_ID, by = list(spring$n.date), FUN="length")
+colnames(countsS)[colnames(countsS)==c("Group.1","x")] <- c("Date","Nr.tracks")
+countsA <- aggregate(autumn$Track_ID, by = list(autumn$n.date), FUN="length")
+colnames(countsA)[colnames(countsA)==c("Group.1","x")] <- c("Date","Nr.tracks")
+
+#visualize the full dataset with lines that represent 95% quantiles for spring and autumn season (coloured differently)
 library(ggplot2)
 ggplot(counts, aes(Date,Nr.tracks)) +
   annotate("rect",xmin=as.Date("2007-02-15"),xmax=as.Date("2007-05-31"),ymin=0,ymax=Inf,fill="forestgreen",alpha=0.4)+
@@ -89,7 +90,8 @@ ggplot(counts, aes(Date,Nr.tracks)) +
   annotate("rect",xmin=as.Date("2009-08-01"),xmax=as.Date("2009-11-30"),ymin=0,ymax=Inf,fill="coral",alpha=0.4)+
   annotate("rect",xmin=as.Date("2010-02-15"),xmax=as.Date("2010-05-31"),ymin=0,ymax=Inf,fill="forestgreen",alpha=0.4)+
   geom_col(fill="black") +
-  geom_hline(yintercept=quantile(counts$Nr.tracks,c(.95),type=8), color = "red")+
+  geom_hline(yintercept=quantile(countsA$Nr.tracks,c(.95),type=8), color = "red")+
+  geom_hline(yintercept=quantile(countsS$Nr.tracks,c(.95),type=8), color = "blue")+
   #ggtitle("Number of tracks per day 2007-2010") +
   coord_cartesian(xlim=c(as.Date("2007-06-01"), as.Date("2010-06-01")))+
   #geom_vline(xintercept = as.numeric(means$Date[c(82,157,227,311,396,470,553,638,706,785,872,959)]),linetype=2,colour=c("black"),size=1.5)+
@@ -100,7 +102,7 @@ ggplot(counts, aes(Date,Nr.tracks)) +
   xlab("Year") + ylab("Number of tracks per day") + ylim(0,20400) +
   scale_x_date(date_breaks="years", date_labels="%Y", limits=c(as.Date("2007-06-01"), as.Date("2010-06-01")))
 
-
+#calculate and visualize all the quantiles (for all seasons)
 nights1=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.95),type=8))
 nights2=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.75),type=8))
 nights3=subset(counts,Nr.tracks>=quantile(counts$Nr.tracks,c(.5),type=8))
@@ -124,3 +126,10 @@ ggplot(qnts, aes(quantiles,numbers)) +
   scale_y_continuous(breaks=seq(0,613,20)) + 
   scale_x_continuous(breaks=c(.0,.25,.5,.75,.95),labels=c("0%","25%","50%","75%","95%"))
 
+#use dates calculated based on 95% to extract nights for the analysis from the horizontal radar
+
+a <- c(nightsS$Date,nightsA$Date)
+setwd('C:/Users/mbradar/Documents/Merlin/OWEZ/Model')
+write.csv(a,file = 'nights.csv',row.names = FALSE )
+check <- Allbirds[which(Allbirds$n.date %in% a),]
+fsv <- check[,c(1:2,10,22:23)]
