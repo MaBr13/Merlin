@@ -40,4 +40,8 @@
 *.mp4
 .Rproj.user
 *.mat
-*.mat
+*.prj
+*.rds
+*.cpg
+*.asv
+
