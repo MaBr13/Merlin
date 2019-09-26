@@ -1,4 +1,10 @@
+####Script to analyze departure locations of the birds + heading airspeed data from the radar location (which is also
+#the same for departure locations as they were kept constant)
 
+
+#prepare the data with the script "statistical analysis"
+
+#make bounding boxes for different countries (the way to group departure locations)
 Departures_int <- rbind(Departures_Spring_int,Departures_Autumn_int)
 Departures_int$country <- with(Departures_int,
                                ifelse(Long_start>=4.74 & Long_start<=7.06 & 
@@ -58,13 +64,13 @@ Departures_Autumn_int$country <- with(Departures_Autumn_int,
 
 library(lubridate)
 Departures_int$Season <- ifelse(month(Departures_int$date)>=8 & month(Departures_int$date)<12,"Autumn","Spring") 
-
-Departures_int$country <- factor(Departures_int$country, levels = c("Belgium","Denmark","France","Germany","Norway", "Sweden",
-                                                                    "The Netherlands","UK & Ireland", "Other"),
-                                 labels =c("Belgium","Denmark","France","Germany","Norway", "Sweden",
-                                           "The Netherlands","UK & Ireland", "Other"))
+#change the order of the countries according to latitude
+Departures_int$country <- factor(Departures_int$country, levels = c("Norway", "Sweden","Denmark","Germany","The Netherlands", "Belgium",
+                                                                    "UK & Ireland","France","Other"),
+                                 labels  = c("Norway", "Sweden","Denmark","Germany","The Netherlands", "Belgium",
+                                                    "UK & Ireland","France","Other"))
 library(ggplot2)
-#per day of each season
+#daily proportions of departure locations per season
 ggplot(subset(Departures_int,month(date)>=2 & month(date)<=5),aes(x = factor(date), fill = country)) + 
   geom_bar(position = "fill")+
   ylab("Proportion") + 
@@ -74,7 +80,7 @@ ggplot(subset(Departures_int,month(date)>=2 & month(date)<=5),aes(x = factor(dat
   theme_minimal()+
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
   
-#season 
+#seasonal proportions of departure locations
 colourCount = length(unique(Departures_int$country))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
@@ -84,6 +90,53 @@ getPalette = colorRampPalette(brewer.pal(9, "Set1"))
   scale_fill_brewer(palette="PuBuGn",name="Origin")+
   theme_minimal()
   
+#figures per day
+  
+  p1 <- ggplot(subset(Departures_int,date=="2008-10-30"),aes(x=date, fill=country))+
+    geom_bar(position = "fill",colour="black")+
+    # coord_flip()+
+    ylab("Proportion")+  
+    scale_fill_brewer(palette="PuBuGn",name="")+
+    theme_minimal()+
+    theme(legend.position = "none",
+          axis.title.y = element_text(size=18),
+          axis.text.y=element_text(size=14), axis.text.x=element_blank(),
+          axis.title.x = element_blank())
+  
+  
+  p2 <- ggplot(subset(Departures_int,date=="2008-10-30"),aes(x=heading,fill=country))+
+    geom_histogram(colour="black",breaks = seq(0,360,10))+
+    ylab("Number") + 
+    xlab("Heading (degrees)")+
+    scale_colour_manual(values = rep("black",7))+
+    scale_fill_brewer(palette="PuBuGn",name="")+
+    theme_minimal()+
+    theme(legend.position="none",
+          axis.title.y = element_text(size=18),
+          axis.text.y=element_text(size=14), axis.text.x=element_text(size=14),
+          axis.title.x = element_text(size=18))+
+    scale_x_continuous(breaks = seq(0,360,60))
+  
+  p3 <- ggplot(subset(Departures_int,date=="2008-04-22"),aes(x=winddir_start,fill=country))+
+    geom_histogram(colour="black",breaks = seq(0,360,10))+
+    ylab("Number") + 
+    xlab("Wind direction (degrees)")+
+    scale_colour_manual(values = rep("black",7))+
+    scale_fill_brewer(palette="PuBuGn",name="")+
+    theme_minimal()+
+    theme(legend.position="none",
+          axis.title.y = element_text(size=12),
+          axis.text.y=element_text(size=12), axis.text.x=element_text(size=12),
+          axis.title.x = element_text(size=12))+
+    scale_x_continuous(breaks = seq(0,360,30))
+  
+  library(ggpubr)
+  library(grid)
+  
+  ggarrange(p1,p2,labels = c("A","B"),ncol = 2,
+            widths=c(0.3,1,1,1))+
+    theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"))
+  #annotate_figure(migrants,top = textGrob("Diurnal and nocturnal migrants",gp=gpar(fontsize=24,fontface="bold")))
 
   
 Other_S = nrow(Departures_Spring_int[Departures_Spring_int$country=="Other",]) / nrow(Departures_Spring_int)*100
@@ -106,20 +159,20 @@ Sweden_A = nrow(Departures_Autumn_int[Departures_Autumn_int$country=="Sweden",])
 Netherlands_A = nrow(Departures_Autumn_int[Departures_Autumn_int$country=="The Netherlands",]) / nrow(Departures_Autumn_int)*100
 UK_A = nrow(Departures_Autumn_int[Departures_Autumn_int$country=="UK & Ireland",]) / nrow(Departures_Autumn_int)*100
 
-
+#make histograms of distributions of headings and airspeeds
 ##NOTE: when saving plots, make them 700x700 and change fontsize to 14
 ##if saving in a grid, make the final picutre 2500x2000, and change fontsize to 28
 s1 <- ggplot(subset(Departures_int,month(date)>=8 & month(date)<=11),aes(x = airspeed, fill = country)) + 
   geom_histogram(colour="black",breaks = seq(0,30,1))+
+  theme_minimal()+
   ylab("Number") + 
   xlab("Airspeed (m/s)")+
   scale_colour_manual(values = rep("black",7))+
   scale_fill_brewer(palette="PuBuGn",name="")+
-  theme_minimal()+
-  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=28),
-        axis.title.y = element_text(size=28),
-        axis.text.y=element_text(size=22), axis.text.x=element_text(size=22),
-        axis.title.x = element_text(size=28))+
+  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=14),
+        axis.title.y = element_blank(),
+        axis.text.y=element_blank(), axis.text.x=element_text(size=12),
+        axis.title.x = element_text(size=14), panel.grid = element_blank())+
   scale_x_continuous(breaks = seq(0,30,5))
 
 s2 <- ggplot(subset(Departures_int,month(date)>=2 & month(date)<=5),aes(x = airspeed, fill = country)) + 
@@ -129,89 +182,44 @@ s2 <- ggplot(subset(Departures_int,month(date)>=2 & month(date)<=5),aes(x = airs
   scale_colour_manual(values = rep("black",7))+
   scale_fill_brewer(palette="PuBuGn",name="")+
   theme_minimal()+
-  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=28),
-        axis.title.y = element_text(size=28),
-        axis.text.y=element_text(size=22), axis.text.x=element_text(size=22),
-        axis.title.x = element_text(size=28))+
+  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=14),
+        axis.title.y = element_blank(),
+        axis.text.y=element_blank(), axis.text.x=element_text(size=12),
+        axis.title.x = element_text(size=14),panel.grid = element_blank())+
   scale_x_continuous(breaks = seq(0,30,5))
 
 s3 <- ggplot(subset(Departures_int,month(date)>=8 & month(date)<=11),aes(x = heading, fill = country)) + 
   geom_histogram(colour="black",breaks = seq(0,360,10))+
   ylab("Number") + 
   xlab("Heading (degrees)")+
+  coord_polar()+
   scale_colour_manual(values = rep("black",7))+
   scale_fill_brewer(palette="PuBuGn",name="")+
   theme_minimal()+
-  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=28),
-        axis.title.y = element_text(size=28),
-        axis.text.y=element_text(size=22), axis.text.x=element_text(size=22),
-        axis.title.x = element_text(size=28))+
-  scale_x_continuous(breaks = seq(0,360,30))
+  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=14),
+        axis.title.y = element_blank(),
+        axis.text.y=element_blank(), axis.text.x=element_text(size=12),
+        axis.title.x = element_text(size=14))+
+  scale_x_continuous(breaks = seq(0,360,45))
 
 s4 <- ggplot(subset(Departures_int,month(date)>=2 & month(date)<=5),aes(x = heading, fill = country)) + 
   geom_histogram(colour="black",breaks = seq(0,360,10))+
   ylab("Number") + 
   xlab("Heading (degrees)")+
+  coord_polar()+
   scale_colour_manual(values = rep("black",7))+
   scale_fill_brewer(palette="PuBuGn",name="")+
   theme_minimal()+
-  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=28),
-        axis.title.y = element_text(size=28),
-        axis.text.y=element_text(size=22), axis.text.x=element_text(size=22),
-        axis.title.x = element_text(size=28))+
-  scale_x_continuous(breaks = seq(0,360,30))
+  theme(legend.position=c(0.85, 0.75),legend.text = element_text(size=14),
+        axis.title.y = element_blank(),
+        axis.text.y=element_blank(), axis.text.x=element_text(size=12),
+        axis.title.x = element_text(size=14))+
+  scale_x_continuous(breaks = seq(0,360,45))
 
 library(ggpubr)
 library(grid)
-
-ggarrange(s2,s1,s4,s3,labels = c("Spring","Autumn","",""),font.label = list(size = 28),ncol=2,nrow = 2,
-          widths=c(1,1,1,1),common.legend = TRUE,legend ="right")+
-  theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"))
-
-#figures per day
-
-p1 <- ggplot(subset(Departures_int,date=="2008-10-30"),aes(x=date, fill=country))+
-  geom_bar(position = "fill",colour="black")+
- # coord_flip()+
-  ylab("Proportion")+  
-  scale_fill_brewer(palette="PuBuGn",name="")+
-  theme_minimal()+
- theme(legend.position = "none",
-       axis.title.y = element_text(size=18),
-       axis.text.y=element_text(size=14), axis.text.x=element_blank(),
-       axis.title.x = element_blank())
-
-
-p2 <- ggplot(subset(Departures_int,date=="2008-10-30"),aes(x=heading,fill=country))+
-  geom_histogram(colour="black",breaks = seq(0,360,10))+
-  ylab("Number") + 
-  xlab("Heading (degrees)")+
-  scale_colour_manual(values = rep("black",7))+
-  scale_fill_brewer(palette="PuBuGn",name="")+
-  theme_minimal()+
-  theme(legend.position="none",
-        axis.title.y = element_text(size=18),
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14),
-        axis.title.x = element_text(size=18))+
-  scale_x_continuous(breaks = seq(0,360,60))
-
-p3 <- ggplot(subset(Departures_int,date=="2008-04-22"),aes(x=winddir_start,fill=country))+
-  geom_histogram(colour="black",breaks = seq(0,360,10))+
-  ylab("Number") + 
-  xlab("Wind direction (degrees)")+
-  scale_colour_manual(values = rep("black",7))+
-  scale_fill_brewer(palette="PuBuGn",name="")+
-  theme_minimal()+
-  theme(legend.position="none",
-        axis.title.y = element_text(size=12),
-        axis.text.y=element_text(size=12), axis.text.x=element_text(size=12),
-        axis.title.x = element_text(size=12))+
-  scale_x_continuous(breaks = seq(0,360,30))
-
-library(ggpubr)
-library(grid)
-
-ggarrange(p1,p2,labels = c("A","B"),ncol = 2,
-          widths=c(0.3,1,1,1))+
- theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"))
-#annotate_figure(migrants,top = textGrob("Diurnal and nocturnal migrants",gp=gpar(fontsize=24,fontface="bold")))
+windows(8,8)
+sf<- ggarrange(s2,s1,s4,s3,labels = c("(a)","(b)","",""),font.label = list(size = 22),ncol=2,nrow = 2,
+          widths=c(1,1,0.8,0.8),common.legend = TRUE,legend ="bottom")+
+  theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"), legend.text = element_text(size = 4))
+ggsave(filename=paste0("C:/Users/mbradar/surfdrive/Documents/Maja_PhD/first_paper_ver1/Paper figures/season_histograms.png"),sf,dpi=500)
