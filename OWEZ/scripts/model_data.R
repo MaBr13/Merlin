@@ -27,26 +27,32 @@ listTyear <- lapply(Tyear,read.csv,sep=';',header= TRUE, colClasses=colClasses)
 nc <- ncol(read.csv(Fyear[1], sep=';',header = TRUE, nrows=1))
 colClasses <- replace(rep("NULL", nc),c(1,8:12,14:15,17,20:22,26,29),NA)
 listFyear <- lapply(Fyear,read.csv,sep=';',header= TRUE, colClasses=colClasses)
-#create timestamp and date in all the lists
+#create timestamp and date in all the lists (in this case we have extra timestamp
+#that includes minutes to decrease the ring effect in the model, but we also keep 
+#the one with just hours to be able to merge the weather data)
 library(lubridate)
 Sys.setenv(TZ="UTC")
 Sys.setlocale(category = "LC_ALL", locale = "English_United Kingdom.1252")#set the time on your computer to match
 
 for(k in 1:length(listFstyear)){
   listFstyear[[k]]$date <- with(listFstyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
-  listFstyear[[k]]$timestep <- with(listFstyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFstyear[[k]]$timestep.w <- with(listFstyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFstyear[[k]]$timestep <- with(listFstyear[[k]], ymd_hm(paste(jaar,maand,dag, uur,minuut, sep= ' ')))
 }
 for(k in 1:length(listSyear)){
   listSyear[[k]]$date <- with(listSyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
-  listSyear[[k]]$timestep <- with(listSyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listSyear[[k]]$timestep.w <- with(listSyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listSyear[[k]]$timestep <- with(listSyear[[k]], ymd_hm(paste(jaar,maand,dag, uur,minuut, sep= ' ')))
 }
 for(k in 1:length(listTyear)){
   listTyear[[k]]$date <- with(listTyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
-  listTyear[[k]]$timestep <- with(listTyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listTyear[[k]]$timestep.w <- with(listTyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listTyear[[k]]$timestep <- with(listTyear[[k]], ymd_hm(paste(jaar,maand,dag, uur,minuut, sep= ' ')))
 }
 for(k in 1:length(listFyear)){
   listFyear[[k]]$date <- with(listFyear[[k]], ymd(paste(jaar,maand,dag, sep=' ')))
-  listFyear[[k]]$timestep <- with(listFyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFyear[[k]]$timestep.w <- with(listFyear[[k]], ymd_h(paste(jaar,maand,dag, uur, sep= ' ')))
+  listFyear[[k]]$timestep <- with(listFyear[[k]], ymd_hm(paste(jaar,maand,dag, uur,minuut, sep= ' ')))
 }
 #merge together all the months in a year
 #y2007 <- do.call("rbind", listFstyear)
@@ -75,20 +81,20 @@ Fweather <- read.csv('Winds_radar_2010_pl1000_3h.csv',sep = ',')
 
 weather <- list(Fstweather,Sweather,Tweather,Fweather)
 rm(list = c("Fstweather","Sweather","Tweather", "Fweather"))#remove all the lists you don't need
-
+#change the name of the merging column, so it is the same in both data frames
 for(k in 1:length(weather)){
   weather[[k]]$timestamp <- as.POSIXct(weather[[k]]$timestamp)
-  colnames(weather[[k]])[colnames(weather[[k]])=="timestamp"] <- "timestep"
+  colnames(weather[[k]])[colnames(weather[[k]])=="timestamp"] <- "timestep.w"
 }
 
-
+#merge two data frames (rows that do not have a match will have missing values)
 library(dplyr)
 Allyears_ <- lapply(1:4, function(n){
-    Allyears[[n]] %>% left_join(weather[[n]], by=c("timestep"))
+    Allyears[[n]] %>% left_join(weather[[n]], by=c("timestep.w"))
    })
 
 
-
+#interpolate missing wind components in the data
 library(imputeTS)
 for (k in 1:length(Allyears_)){
   Allyears_[[k]]$u_new<- na.interpolation(Allyears_[[k]]$u, option ="linear")
@@ -130,7 +136,8 @@ for(k in 1:length(Allyears_)){
   Allyears_[[k]]$b.heading <-  ifelse(Allyears_[[k]]$r.heading<0, 360+Allyears_[[k]]$r.heading, Allyears_[[k]]$r.heading)
 }
 
-#change calendar days into migration days
+#change calendar days into migration days (to be able to extract data of one migration night that contains two
+#calendar days)
 for (k in 1:length(Allyears_)){
   s <- Allyears_[[k]]
   date <- paste0(format(s[1,15], format="%Y-%m-%d"))
@@ -142,7 +149,7 @@ for (k in 1:length(Allyears_)){
   Allyears_[[k]]$n.month <- month(Allyears_[[k]]$change)
   Allyears_[[k]]$n.day <- day(Allyears_[[k]]$change)
   Allyears_[[k]]$n.date <- with(Allyears_[[k]],ymd(paste(n.year,n.month,n.day,sep = ' ')))
-  Allyears_[[k]]$migr.day <- with(Allyears_[[k]],ymd_h(paste(n.year,n.month,n.day,uur,sep = ' ')))
+  Allyears_[[k]]$migr.day <- with(Allyears_[[k]],ymd_hm(paste(n.year,n.month,n.day,uur,minuut,sep = ' ')))
   Allyears_[[k]] <- Allyears_[[k]] %>% arrange(timestep)
 }
 
@@ -153,7 +160,7 @@ AllBirds <- list()
 
 for (k in 1:length(Allyears_)){
   AllBirds[[k]]<- subset(Allyears_[[k]],light==0 & airspeedms>=5 & airspeedms<=30,
-                         select=c(date,timestep,trackheading, groundspeedms, n.date,n.year,n.month,n.day,
+                         select=c(date,timestep,timestep.w,trackheading, groundspeedms, n.date,n.year,n.month,n.day,
                                                   windspeedms,airspeedms,new.winddir,b.heading))
 }
 
@@ -199,10 +206,8 @@ setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/statistical_analysis/data")
 write.csv(Spring_int, file = "Spring_int.csv")
 write.csv(Autumn_int,file="Autumn_int.csv")
 
-rm(list=c("AllBirds_1","analysis","Spring_int","Autumn_int"))
-#divide intense nights and filer based on sunrise and sunset times to use them in running a simulation
-Allyears_1 <- do.call("rbind",Allyears_) 
-analysis <- Allyears_1[which(Allyears_1$n.date %in% dates),]
+rm(list=c("AllBirds_1","Spring_int","Autumn_int"))
+#divide intense nights and filter based on sunrise and sunset times to use them in running a simulation
 
 Alldays <- split(analysis,analysis$n.date)
 
@@ -215,11 +220,12 @@ for (k in 1:length(Alldays)){
 }
 
 for (k in 1:length(Alldays)){
-  Alldays[[k]] <- Alldays[[k]] %>% arrange(timestep)
+  Alldays[[k]] <- Alldays[[k]] %>% arrange(timestep.w)
 }
 
 for (k in 1:length(Alldays)){
   Alldays[[k]]$timestep<- as.character(Alldays[[k]]$timestep)
+  Alldays[[k]]$timestep.w<- as.character(Alldays[[k]]$timestep.w)
 }
 
 sun <- list()
@@ -230,6 +236,12 @@ for (k in 1:length(Alldays)){
  colnames(sun[[k]])[colnames(sun[[k]])==c("date","new.date")] <- c("timestep","date")
  sun[[k]]$sunrise <- sun[[k]]$sunrise-3600
 }
+
+for (k in 1:length(sun)){
+  sun[[k]]$date <- as.character(sun[[k]]$date)
+  Alldays[[k]]$date<- as.character(Alldays[[k]]$date)
+}
+
 
 Join <- lapply(1:22, function(n){
   Alldays[[n]] %>% left_join(sun[[n]], by=c("date"))
@@ -252,7 +264,7 @@ for (k in 1:length(Join)){
 }
 
 #saving the data
-setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/radar_data")
+setwd("C:/Users/mbradar/Documents/Merlin/OWEZ/Model/radar_data/final_data")
 
 library(lubridate)
 for (k in 1:length(Birds)){
@@ -264,73 +276,5 @@ for (k in 1:length(Birds)){
 fsv <- do.call(rbind.data.frame, Birds)
 write.csv(fsv,file = "intense_migration_hr.csv", row.names = FALSE)
 
-###################################################################################
-########SKIP THIS PART IF YOU WANT ALL THE DIRECTIONS INCLUDED#####################
-#filtering on timestamp, airspeed and directions that majority of birds is using
-#first divide list in autumn and spring, because preferred directions are not the same
-
-
-for (k in 1:8){
-    Birds[[k]] <- subset(Birds[[k]],b.heading>=165 & b.heading<=280)
-  }
-  
-for (k in 9:13){
-  Birds[[k]] <- subset(Birds[[k]],b.heading>=30 & b.heading<=165)
-}
-
-
-for(k in 1:length(Birds)){
-  
-  Birds[[k]]$Aspeed<- cut(Birds[[k]]$airspeedms,breaks=c(5,10,15,20,25,30), 
-                             labels = c("5-10","10-15","15-20", "20-25", "25-30"))
-  
-}
-
-for (k in 1:length(Birds)){
-  Birds[[k]]$Aspeed <- factor(Birds[[k]]$Aspeed, levels = rev(levels(Birds[[k]]$Aspeed)))
-  
-}
-#visualizations
-ggplot(Birds[[9]], aes(x=b.heading)) + 
-  geom_histogram(aes(fill=Birds[[9]]$Aspeed, colour=Birds[[9]]$Aspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black","black"), name="Air speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("snow2","gray83","lightslategray","darkslategray4","darkslategray", "turquoise4"), name="Air speed (m/s)", drop=F)+
- # ggtitle('Heading of birds') + 
-  ylab("Number of tracks")+ 
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  coord_polar(start = 0) +
-  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
-
-#categories wind speed
-
-wind_a <- read.csv('winds_autumn2.csv',sep = ',')
-
-
-
-  
-  wind_a$Wspeed<- cut(wind_a$wind_sp,breaks=c(-1,5,10,15,20,25,50), 
-                             labels = c("0-5","5-10","10-15","15-20","20-25",">25"))
-  
-
-
-  wind_a$Wspeed <- factor(wind_a$Wspeed, levels = rev(levels(wind_a$Wspeed)))
-  
-
-
-ggplot(wind_a, aes(x=winddir)) + 
-  geom_histogram(aes(fill=wind_a$Wspeed, colour=wind_a$Wspeed), breaks=c(0,30,60,90,120,150,180,210,240,270,300,330,360)) +
-  scale_colour_manual(values = c("black", "black", "black",  "black", "black",  "black","black","black","black"), name="Wind speed (m/s)", drop=F)+
-  scale_fill_manual(values = c("snow2","gray83","lightslategray","darkslategray4","darkslategray", "turquoise4"), name="Wind speed (m/s)", drop=F)+
-  #ggtitle("Winds") + 
-  ylab("Number of tracks")+
-  theme(axis.title.y = element_text(size=18), legend.text=element_text(size=12), 
-        legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
-        axis.text.y=element_text(size=14), axis.text.x=element_text(size=14), plot.margin = unit(c(0,0,0,0), "cm"),
-        axis.title.x = element_blank(), plot.title = element_text(size = 18, face = "bold"))+
-  coord_polar(start = 0) +
-  scale_x_continuous("",limits=c(0,360), breaks = c(0,30,60,90,120,150,180,210,240,270,300,330,360))
 
 
