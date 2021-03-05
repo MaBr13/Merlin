@@ -150,7 +150,7 @@ main.plot1 <- ggplot(countsS,aes(x=reorder(Date, -Nr.tracks), Nr.tracks))+
   geom_col(col="black",fill="cyan4",width = 1)+
   geom_vline(xintercept = which.min(abs(sort(countsS$Nr.tracks,decreasing=TRUE) - 
                                           quantile(countsS$Nr.tracks,0.95,type=8)))+0.5,col="red")+
-  xlab("Nights") + ylab("Number of tracks") +
+  xlab("Night") + ylab("Number of tracks") +
   theme_minimal()+
   theme(axis.title.y = element_blank(), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -164,7 +164,7 @@ main.plot2 <- ggplot(countsA,aes(x=reorder(Date, -Nr.tracks), Nr.tracks))+
   geom_col(col="black",fill="cyan4",width = 1)+
   geom_vline(xintercept = which.min(abs(sort(countsA$Nr.tracks,decreasing=TRUE) - 
                                           quantile(countsA$Nr.tracks,0.95,type=8)))+0.5,col="red")+
-  xlab("Nights") + ylab("Number of tracks") +
+  xlab("Night") + ylab("Number of tracks") +
   theme_minimal()+
   theme(axis.title.y = element_blank(), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
@@ -180,7 +180,7 @@ inset.plot <- ggplot(countsA,aes(x=reorder(Date, -Nr.tracks), Nr.tracks))+
   coord_cartesian(xlim =c(0,which.min(abs(sort(countsA$Nr.tracks,decreasing=TRUE) - 
                                             quantile(countsA$Nr.tracks,0.95,type = 8)))+1),clip = "on")+
   theme_bw()+
-  xlab("Nights") + ylab("Number of tracks") +
+  xlab("Night") + ylab("Number of tracks") +
   theme(axis.title.y = element_text(size=14), legend.text=element_text(size=12), 
         legend.title=element_text(size=16, face="bold"), legend.position = "bottom",
         axis.text.y=element_text(size=11,face="bold",margin =unit(c(0,0,0,0),"cm")),
@@ -196,7 +196,7 @@ library(grid)
 p=ggarrange(main.plot1,main.plot2,labels = c("(a)","(b)"),font.label = list(size = 14),ncol=2,nrow = 1,
           widths=c(1,1,1,1),common.legend = TRUE,legend ="right",label.x=c(0.8,.8))+
   theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"))
-p=annotate_figure(p,bottom = text_grob("Nights",size=14),left = text_grob("Number of tracks",size=14,rot=90))
+p=annotate_figure(p,bottom = text_grob("Night",size=14),left = text_grob("Number of tracks",size=14,rot=90))
 ggsave(filename=paste0("C:/Users/mbradar/Documents/check.png"),p,dpi=500)
 
 windows(4,2)

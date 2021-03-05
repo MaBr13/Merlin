@@ -196,13 +196,14 @@ rayleigh.test(circular(Autumn_rad$b.heading,type="directions", units="degrees",m
 rayleigh.test(circular(Spring_rad$b.heading,type="directions", units="degrees",modulo="2pi", template='geographics'))
 rayleigh.test(circular(Autumn_int_rad$b.heading,type="directions", units="degrees",modulo="2pi", template='geographics'))
 rayleigh.test(circular(Spring_int_rad$b.heading,type="directions", units="degrees",modulo="2pi", template='geographics'))
+
 #track direction
 rayleigh.test(circular(Autumn_rad$trackheading,type="directions", units="degrees",modulo="2pi", template='geographics'))
 rayleigh.test(circular(Spring_rad$trackheading,type="directions", units="degrees",modulo="2pi", template='geographics'))
 rayleigh.test(circular(Autumn_int_rad$trackheading,type="directions", units="degrees",modulo="2pi", template='geographics'))
 rayleigh.test(circular(Spring_int_rad$trackheading,type="directions", units="degrees",modulo="2pi", template='geographics'))
-
-
+rayleigh.test(circular(Departures_Spring_int$td_start,type="directions", units="degrees",modulo="2pi", template='geographics'))
+rayleigh.test(circular(Departures_Autumn_int$td_start,type="directions", units="degrees",modulo="2pi", template='geographics'))
 #Watson's large non-parametric test for common mean direction of
 #two or more samples of circular data 
 #compares values with the quantiles of chi squared distribution

@@ -1,3 +1,7 @@
+#colour argument is added
+#xlabels is a workaround to put timestamp on x axis
+
+
 feather.plot2 <- function (r, theta,xpos,colour, yref = 0, use.arrows = TRUE, col.refline = "lightgray",
                            fp.type = "s", main = "", xlab = "", ylab = "", xlabels = NULL,
                            ...)
@@ -20,7 +24,7 @@ feather.plot2 <- function (r, theta,xpos,colour, yref = 0, use.arrows = TRUE, co
   box()
   if (is.null(xlabels))
     axis(1)
-  else axis(1, at = xpos, col=NULL, labels = xlabels,font=0.1)
+  else axis(1, at = xpos, col=NULL, labels = xlabels,cex.axis = 0.8, font = 1, family = 'serif',las=1)
  if (is.null(col))
   col= "black"
   abline(h = yref, col = col.refline)
@@ -30,4 +34,5 @@ feather.plot2 <- function (r, theta,xpos,colour, yref = 0, use.arrows = TRUE, co
   par(pin = oldpin)
 
 }
+
 
